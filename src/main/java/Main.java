@@ -3,53 +3,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.sourceforge.jFuzzyLogic.FIS;
-import net.sourceforge.jFuzzyLogic.FunctionBlock;
-import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
-import net.sourceforge.jFuzzyLogic.rule.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
 
+        FuzzyDoctor fuzzyDoctor = new FuzzyDoctor();
+
+        List<Parameter> parameters = new ArrayList<>();
+        parameters.add(new Parameter("cisnienie_krwi", 8));
+        List<Disease> results = fuzzyDoctor.makeAnalysis(parameters);
 
 
-
-
-        // Load from 'FCL' file
-        //TODO change hardcode to not hartcode, or just change string - after all it's only university project,
-        // nobody will look at this code
-        String fileName = "D:\\projekty_java\\DoctorArtificial\\src\\main\\java\\tipper.fcl";
-        FIS fis = FIS.load(fileName,true);
-
-        // Error while loading?
-        if( fis == null ) {
-            System.err.println("Can't load file: '" + fileName + "'");
-            return;
-        }
-
-        // Show
-        FunctionBlock functionBlock = fis.getFunctionBlock("tipper");
-        JFuzzyChart.get().chart(functionBlock);
-
-        // Set inputs
-        fis.setVariable("service", 3);
-        fis.setVariable("food", 7);
-
-        // Evaluate
-        fis.evaluate();
-
-        // Show output variable's chart
-        Variable tip = functionBlock.getVariable("tip");
-        JFuzzyChart.get().chart(tip, tip.getDefuzzifier(), true);
-
-        // Print ruleSet
-        System.out.println(fis);
+        results.forEach(result -> System.out.println(
+                result.getName() + "  " +  result.getValue()));
     }
 
 
