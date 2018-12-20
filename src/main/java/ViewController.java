@@ -46,6 +46,8 @@ public class ViewController {
         List<Parameter> parameters = getParametersFromFields();
         FuzzyDoctor fuzzyDoctor = new FuzzyDoctor();
         List<Disease> diseases = fuzzyDoctor.makeAnalysis(parameters);
+        fuzzyDoctor.showFuzzyficationCharts();
+        fuzzyDoctor.showResultsCharts();
         printAnswer(diseases);
     }
 
@@ -73,7 +75,7 @@ public class ViewController {
     private String getDiseaseDescription(Disease disease) {
 
         return disease.getName().replace("_", " ") + " : "
-                + formatter.format(disease.getValue()) + "% prawdopodobienstwa wystapienia ("
+                + "prawdopodobienstwo wystapienia " + formatter.format(disease.getValue()) + "% ("
                 + getVerboseProbability(disease.getValue()) + ")\n";
     }
 

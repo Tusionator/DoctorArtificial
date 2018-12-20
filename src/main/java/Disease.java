@@ -5,7 +5,7 @@ import java.util.List;
 public class Disease {
     public static final List<String> DISEASES_NAMES = new ArrayList<>(
             Arrays.asList(
-                    "nadcisnieniekrwi"));
+                    "nadcisnienie_krwi"));
 
     private String name;
     private double value;
