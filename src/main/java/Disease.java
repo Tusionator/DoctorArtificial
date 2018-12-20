@@ -7,8 +7,8 @@ public class Disease {
             Arrays.asList(
                     "nadcisnieniekrwi"));
 
-    String name;
-    double value;
+    private String name;
+    private double value;
 
     public Disease(String name, double value) {
         this.name = name;

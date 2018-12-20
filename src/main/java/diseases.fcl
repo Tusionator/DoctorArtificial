@@ -2,6 +2,7 @@ FUNCTION_BLOCK fuzzyLogicDoctor	// Block definition (there may be more than one 
 
 VAR_INPUT				// Define input variables
 	cisnienie_krwi : REAL;
+	bilirubina : REAL;
 END_VAR
 
 VAR_OUTPUT				// Define output variable

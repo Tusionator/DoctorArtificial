@@ -8,7 +8,8 @@ import java.util.List;
 public class Parameter {
     public static final List<String> PARAMETERS_NAMES = new ArrayList<>(
             Arrays.asList(
-                    "cisnienie_krwi"));
+                    "cisnienie_krwi",
+                    "bilirubina"));
 
 
     private String name;
