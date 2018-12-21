@@ -1,34 +1,111 @@
 FUNCTION_BLOCK fuzzyLogicDoctor	// Block definition (there may be more than one block per file)
 
-VAR_INPUT				// Define input variables
+VAR_INPUT				// Odczyty badań pacjenta
+// Morfologia krwi
 	cisnienie_krwi : REAL;
 	bilirubina : REAL;
+	hemoglobina : REAL;
+	zelazo : REAL;
+	wit_b12 : REAL;
+	amylaza : REAL;
+	mcv : REAL;
+	leukocytoza : REAL;
+	kwas_foliowy : REAL;
+	hdl : REAL;
+	ldl : REAL;
+	triglicerydy : REAL;
+	glukoza0: REAL;
+	insulina0 : REAL;
+	kreatynina : REAL;
+	mocznik : REAL;
+	aspat : REAL;
+	alat : REAL;
+	alp : REAL;
+	ggtp : REAL;
+	tsh : REAL;
+	anty_tpo : REAL;
+	anty_tg : REAL;
+// Badanie ogólne moczu
+	crp : REAL;
+	ob : REAL;
+	glukoza : REAL;
+// Spirometria
+	obturacja : REAL;
+	restrykcja : REAL;
+	vc : REAL;
+	fev1 : REAL;
 END_VAR
 
-VAR_OUTPUT				// Define output variable
-	nadcisnienie_krwi : REAL;
+VAR_OUTPUT				// Prawdopodobieństwo występowania choroby
+	nadcisnienie_tetnicze : REAL;
+	insulinoopornosc : REAL;
+	stan_przedcukrzycowy : REAL;
+	cukrzyca : REAL;
+	niewydolnosc_nerek : REAL;
+	niedoczynnosc_tarczycy : REAL;
+	nadczynnosc_tarczycy : REAL;
+	zakazenie_drog_moczowych : REAL;
+	ostry_stan_zapalny : REAL;
+	choroba_nowotworowa : REAL;
+	zoltaczka_zakazna : REAL;
+	zoltaczka_mechaniczna : REAL;
+	zapalenie_trzustki : REAL;
+	niedokrwistosc_z_niedoboru_zelaza : REAL;
+	niedokrwistosc_z_niedoboru_wit_b12 : REAL;
+	niedokrwistosc_z_niedoboru_kwasu_foliowego : REAL;
+	choroba_hashimoto : REAL;
+	wzw : REAL;
+	pochp : REAL;
 END_VAR
 
 FUZZIFY cisnienie_krwi			// Fuzzify input variable 'service': {'male', 'wnormie' , 'wysokie'}
-	TERM niskie := (0, 1) (60,1) (120, 0);
-	TERM wysokie := (110, 0) (200, 1) (300, 1);
+	TERM male := (0, 1) (4, 0) ;
+	TERM wnormie := (1, 0) (4,1) (6,1) (9,0);
+	TERM wysokie := (6, 0) (9, 1);
+END_FUZZIFY
+
+// bilirubina
+// 0,2-1,1 mg% (3,42-20,6 µmol/l)
+FUZZIFY bilirubina
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
 END_FUZZIFY
 
 
-DEFUZZIFY nadcisnienie_krwi
-	TERM malo_prawdopodobne := (0,1) (30,0);
-	TERM sredni_prawdopodobne := (30,0) (50,1) (70,0);
-	TERM bardzo_prawdopodobne := (70,0) (100,1);
+DEFUZZIFY nadcisnienie_tetnicze			// Defzzzify output variable 'tip' : {'maloprawdopodobne', 'prawdopodobne', 'praktyczniepewne' }
+	TERM maloprawdopodobne := (0,0) (5,1) (10,0);
+	TERM prawdopodobne := (10,0) (15,1) (20,0);
+	TERM praktyczniepewne := (20,0) (25,1) (30,0);
 	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
 	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
 END_DEFUZZIFY
+
+DEFUZZIFY zoltaczka_mechaniczna
+	TERM nie := (0,0) (5,1) (10,0);
+	TERM nie_wiem := (10,0) (15,1) (20,0);
+	TERM tak := (20,0) (25,1) (30,0);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+DEFUZZIFY zoltaczka_zakazna
+	TERM nie := (0,0) (5,1) (10,0);
+	TERM nie_wiem := (10,0) (15,1) (20,0);
+	TERM tak := (20,0) (25,1) (30,0);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
 
 RULEBLOCK No1
 	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
 	ACT : MIN;			// Use 'min' activation method
 	ACCU : MAX;			// Use 'max' accumulation method
 
-	RULE 1 : IF cisnienie_krwi IS wysokie THEN nadcisnienie_krwi IS bardzo_prawdopodobne;
+	RULE 1 : IF cisnienie_krwi IS wysokie THEN nadcisnienie_tetnicze IS prawdopodobne;
+	RULE 2 : IF bilirubina IS wysoka THEN zoltaczka_mechaniczna IS tak;
+	RULE 3 : IF bilirubina IS wysoka THEN zoltaczka_zakazna IS tak;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK
