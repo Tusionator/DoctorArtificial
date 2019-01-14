@@ -36,7 +36,7 @@ VAR_INPUT				// Odczyty badań pacjenta
 // Badanie ogólne moczu
 	in_crp : REAL;
 	in_ob : REAL;
-	in_glukoza : REAL;
+	in_glukoza_w_moczu : REAL;
 // Spirometria
 	in_obturacja : REAL;
 	in_restrykcja : REAL;
@@ -91,28 +91,271 @@ FUZZIFY in_bilirubina
 	TERM wysoka := (0.9, 0) (1.2, 1);
 END_FUZZIFY
 
+// hemoglobina
+// 
+FUZZIFY in_hemoglobina
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// żelazo
+// 
+FUZZIFY in_zelazo
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// wit. B 12
+// 
+FUZZIFY in_wit_b12
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// amylaza
+// 
+FUZZIFY in_amylaza
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// mcv
+// 
+FUZZIFY in_hemoglobina
+	TERM mala := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM duza := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// leukocytoza
+// 
+FUZZIFY in_leukocytoza
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// kwas foliowy
+// 
+FUZZIFY in_kwas_foliowy
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// HDL
+// 
+FUZZIFY in_hdl
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// LDL
+// 
+FUZZIFY in_ldl
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// triglicerydy
+// 
+FUZZIFY in_triglicerydy
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// glukoza na czczo
+// 
+FUZZIFY in_glukoza0
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// glukoza po 1 h
+// 
+FUZZIFY in_glukoza1
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// glukoza po 2 h
+// 
+FUZZIFY in_glukoza2
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// insulina na czczo
+// 
+FUZZIFY in_insulina0
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// insulina po 1 h
+// 
+FUZZIFY in_insulina1
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// insulina po 2 h
+// 
+FUZZIFY in_insulina2
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// kreatynina
+// 
+FUZZIFY in_kreatynina
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// mocznik
+// 
+FUZZIFY in_mocznik
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// mocznik
+// 
+FUZZIFY in_aspat
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// ALAT
+// 
+FUZZIFY in_alat
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// GGTP
+// 
+FUZZIFY in_ggtp
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// TSH
+// 
+FUZZIFY in_tsh
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// przeciwciała anty-TPO
+// 
+FUZZIFY in_anty_tpo
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+// przeciwciała anty-TG
+// 
+FUZZIFY in_anty_tg
+	TERM niska := (0, 1) (0.3, 0) ;
+	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1);
+END_FUZZIFY
+
+
+
+
+// CRP
+// 3,1 - 10 mg/l
+FUZZIFY in_crp
+	TERM wnormie := (0, 1) (10, 1) (40, 0);
+	TERM wysoka := (20, 0) (40,1) (150,1) (250,0);
+	TERM bardzowysoka := (150, 0) (250,1) (400,1) (500,0);
+	TERM ekstremalna := (400, 0) (500, 1);
+END_FUZZIFY
+
+// OB
+// <=12 mm/h, starsi 20-30 mm/h
+FUZZIFY in_ob
+	TERM wnormie := (0, 1) (11.5, 1) (12.5, 0) ;
+	TERM wysoka := (11.5, 0) (12.5,1) (14.5,1) (15.5,0);
+	TERM ekstremalna := (14.5, 0) (14.5, 1);
+END_FUZZIFY
+
+// glukoza w moczu
+// 0,1 - 1 mg/dl
+FUZZIFY in_glukoza_w_moczu
+	TERM wnormie := (0, 1) (1, 1) (1.5, 0) ;
+	TERM wysoka := (1, 0) (10,0.5) (250,1);
+END_FUZZIFY
+
 DEFUZZIFY out_nadcisnienie_tetnicze			// Defzzzify output variable 'tip' : {'maloprawdopodobne', 'prawdopodobne', 'praktyczniepewne' }
 	TERM maloprawdopodobne := (0,1) (15,0);
 	TERM prawdopodobne := (10,0) (15,1) (20,0);
 	TERM praktyczniepewne := (20,0) (100, 1);
 	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
-	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
+	DEFAULT := -1;		// Default value is -1 (if no rule activates defuzzifier)
 END_DEFUZZIFY
 
 DEFUZZIFY out_zoltaczka_mechaniczna
-	TERM nie := (0,0) (5,1) (10,0);
-	TERM nie_wiem := (10,0) (15,1) (20,0);
-	TERM tak := (20,0) (25,1) (30,0);
-	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
-	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;		
 END_DEFUZZIFY
 
 DEFUZZIFY out_zoltaczka_zakazna
-	TERM nie := (0,0) (5,1) (10,0);
-	TERM nie_wiem := (10,0) (15,1) (20,0);
-	TERM tak := (20,0) (25,1) (30,0);
-	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
-	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;		
+END_DEFUZZIFY
+
+DEFUZZIFY out_insulinoopornosc
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_stan_przedcukrzycowy
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_cukrzyca
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
 END_DEFUZZIFY
 
 
@@ -123,8 +366,11 @@ RULEBLOCK No1
 
 	RULE 1 : IF in_cisnienie_skurczowe IS prawidlowe AND in_cisnienie_rozkurczowe IS prawidlowe THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
 	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
-	RULE 3 : IF in_bilirubina IS wysoka THEN out_zoltaczka_mechaniczna IS tak;
-	RULE 4 : IF in_bilirubina IS wysoka THEN out_zoltaczka_zakazna IS tak;
+	RULE 3 : IF in_bilirubina IS wysoka THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
+	RULE 4 : IF in_bilirubina IS wysoka THEN out_zoltaczka_zakazna IS praktyczniepewne;
+	//RULE 5 : IF in_glukoza0 IS wysoka AND insulina0 IS wysoka THEN out_insulinoopornosc IS praktyczniepewne;
+	//RULE 6 : IF in_glukoza0 IS wysoka AND insulina0 IS wysoka THEN out_stan_przedcukrzycowy IS praktyczniepewne;
+	//RULE 7 : IF in_glukoza0 IS wysoka AND insulina0 IS wysoka AND in_glukoza_w_moczu IS wysoka THEN out_cukrzyca IS praktyczniepewne;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK
