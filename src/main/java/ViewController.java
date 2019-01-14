@@ -10,35 +10,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewController {
-
     @FXML
     private GridPane parametersGrid;
-
     @FXML
     private TextArea doctorAnswer;
-
     private NumberFormat formatter = new DecimalFormat("#0.0");
+    private FuzzyDoctor fuzzyDoctor = new FuzzyDoctor();
+    private List<String> parametesNames = new ArrayList<>();
 
 
     public ViewController() {
 
     }
 
-    int rowCount = 0;
-
     @FXML
     private void initialize() {
-        Parameter.PARAMETERS_NAMES.forEach(this::addParameter);
+        parametesNames.clear();
+        fuzzyDoctor.getInputVariables().forEach(this::addParameter);
     }
 
     private void addParameter(String parameterName) {
-        Label newLabel = new Label(parameterName.replace("_", " "));
+        Label newLabel = new Label(parameterName.replace("in_", " "));
         TextField newTextField = new TextField();
         newTextField.setId(parameterName);
 
         parametersGrid.getRowConstraints().size();
-        parametersGrid.addRow(rowCount, newLabel, newTextField);
-        rowCount++;
+        parametersGrid.addRow(parametesNames.size(), newLabel, newTextField);
+        parametesNames.add(parameterName);
     }
 
     @FXML
@@ -54,7 +52,7 @@ public class ViewController {
     private List<Parameter> getParametersFromFields() {
         List<Parameter> parameters = new ArrayList<>();
         parametersGrid.getChildren().stream()
-                .filter(child -> Parameter.PARAMETERS_NAMES.contains(child.getId())
+                .filter(child -> parametesNames.contains(child.getId())
                         && ((TextField) child).getText() != null
                         && !((TextField) child).getText().equals(""))
                 .forEach(child -> parameters.add(getParameterFromField((TextField) child)));

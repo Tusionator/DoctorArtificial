@@ -31,7 +31,7 @@ public class FuzzyDoctor {
     }
 
     private List<Disease> getResults() {
-        return Disease.DISEASES_NAMES.stream()
+        return getOutputVariables().stream()
                 .map(diseaseName -> new Disease(diseaseName, fis.getVariable(diseaseName).getValue()))
                 .collect(Collectors.toList());
     }
@@ -49,8 +49,18 @@ public class FuzzyDoctor {
         functionBlock = fis.getFunctionBlock(FUNCTION_BLOCK_NAME);
     }
 
+    public List<String> getInputVariables() {
+        return functionBlock.getVariables().keySet().stream()
+                .filter(s -> s.matches("in_\\S+")).collect(Collectors.toList());
+    }
+
+    private List<String> getOutputVariables() {
+        return functionBlock.getVariables().keySet().stream()
+                .filter(s -> s.matches("out_\\S+")).collect(Collectors.toList());
+    }
+
     public void showResultsCharts() {
-        Disease.DISEASES_NAMES.stream()
+        getOutputVariables().stream()
                 .filter(diseaseName -> fis.getVariable(diseaseName).getValue() > -1)
                 .forEach(this::showChart);
     }

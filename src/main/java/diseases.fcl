@@ -2,60 +2,60 @@ FUNCTION_BLOCK fuzzyLogicDoctor	// Block definition (there may be more than one 
 
 VAR_INPUT				// Odczyty badań pacjenta
 // Morfologia krwi
-	cisnienie_krwi : REAL;
-	bilirubina : REAL;
-	hemoglobina : REAL;
-	zelazo : REAL;
-	wit_b12 : REAL;
-	amylaza : REAL;
-	mcv : REAL;
-	leukocytoza : REAL;
-	kwas_foliowy : REAL;
-	hdl : REAL;
-	ldl : REAL;
-	triglicerydy : REAL;
-	glukoza0: REAL;
-	insulina0 : REAL;
-	kreatynina : REAL;
-	mocznik : REAL;
-	aspat : REAL;
-	alat : REAL;
-	alp : REAL;
-	ggtp : REAL;
-	tsh : REAL;
-	anty_tpo : REAL;
-	anty_tg : REAL;
+	in_cisnienie_krwi : REAL;
+	in_bilirubina : REAL;
+	in_hemoglobina : REAL;
+	in_zelazo : REAL;
+	in_wit_b12 : REAL;
+	in_amylaza : REAL;
+	in_mcv : REAL;
+	in_leukocytoza : REAL;
+	in_kwas_foliowy : REAL;
+	in_hdl : REAL;
+	in_ldl : REAL;
+	in_triglicerydy : REAL;
+	in_glukoza0: REAL;
+	in_insulina0 : REAL;
+	in_kreatynina : REAL;
+	in_mocznik : REAL;
+	in_aspat : REAL;
+	in_alat : REAL;
+	in_alp : REAL;
+	in_ggtp : REAL;
+	in_tsh : REAL;
+	in_anty_tpo : REAL;
+	in_anty_tg : REAL;
 // Badanie ogólne moczu
-	crp : REAL;
-	ob : REAL;
-	glukoza : REAL;
+	in_crp : REAL;
+	in_ob : REAL;
+	in_glukoza : REAL;
 // Spirometria
-	obturacja : REAL;
-	restrykcja : REAL;
-	vc : REAL;
-	fev1 : REAL;
+	in_obturacja : REAL;
+	in_restrykcja : REAL;
+	in_vc : REAL;
+	in_fev1 : REAL;
 END_VAR
 
 VAR_OUTPUT				// Prawdopodobieństwo występowania choroby
-	nadcisnienie_tetnicze : REAL;
-	insulinoopornosc : REAL;
-	stan_przedcukrzycowy : REAL;
-	cukrzyca : REAL;
-	niewydolnosc_nerek : REAL;
-	niedoczynnosc_tarczycy : REAL;
-	nadczynnosc_tarczycy : REAL;
-	zakazenie_drog_moczowych : REAL;
-	ostry_stan_zapalny : REAL;
-	choroba_nowotworowa : REAL;
-	zoltaczka_zakazna : REAL;
-	zoltaczka_mechaniczna : REAL;
-	zapalenie_trzustki : REAL;
-	niedokrwistosc_z_niedoboru_zelaza : REAL;
-	niedokrwistosc_z_niedoboru_wit_b12 : REAL;
-	niedokrwistosc_z_niedoboru_kwasu_foliowego : REAL;
-	choroba_hashimoto : REAL;
-	wzw : REAL;
-	pochp : REAL;
+	out_nadcisnienie_tetnicze : REAL;
+	out_insulinoopornosc : REAL;
+	out_stan_przedcukrzycowy : REAL;
+	out_cukrzyca : REAL;
+	out_niewydolnosc_nerek : REAL;
+	out_niedoczynnosc_tarczycy : REAL;
+	out_nadczynnosc_tarczycy : REAL;
+	out_zakazenie_drog_moczowych : REAL;
+	out_ostry_stan_zapalny : REAL;
+	out_choroba_nowotworowa : REAL;
+	out_zoltaczka_zakazna : REAL;
+	out_zoltaczka_mechaniczna : REAL;
+	out_zapalenie_trzustki : REAL;
+	out_niedokrwistosc_z_niedoboru_zelaza : REAL;
+	out_niedokrwistosc_z_niedoboru_wit_b12 : REAL;
+	out_niedokrwistosc_z_niedoboru_kwasu_foliowego : REAL;
+	out_choroba_hashimoto : REAL;
+	out_wzw : REAL;
+	out_pochp : REAL;
 END_VAR
 
 FUZZIFY cisnienie_krwi			// Fuzzify input variable 'service': {'male', 'wnormie' , 'wysokie'}
