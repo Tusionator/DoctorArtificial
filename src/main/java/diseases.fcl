@@ -2,7 +2,10 @@ FUNCTION_BLOCK fuzzyLogicDoctor	// Block definition (there may be more than one 
 
 VAR_INPUT				// Odczyty badań pacjenta
 // Morfologia krwi
-	in_cisnienie_krwi : REAL;
+	in_is_woman : REAL; // 0 - mężczyzna 1 - kobieta 2 - kobieta w ciąży
+	in_age : REAL;
+	in_cisnienie_skurczowe : REAL;
+	in_cisnienie_rozkurczowe : REAL;
 	in_bilirubina : REAL;
 	in_hemoglobina : REAL;
 	in_zelazo : REAL;
@@ -13,9 +16,7 @@ VAR_INPUT				// Odczyty badań pacjenta
 	in_kwas_foliowy : REAL;
 	in_hdl : REAL;
 	in_ldl : REAL;
-	in_triglicerydy : REAL;
-	in_glukoza0: REAL;
-	in_insulina0 : REAL;
+	in_triglicerydy : REAL;	
 	in_kreatynina : REAL;
 	in_mocznik : REAL;
 	in_aspat : REAL;
@@ -25,6 +26,13 @@ VAR_INPUT				// Odczyty badań pacjenta
 	in_tsh : REAL;
 	in_anty_tpo : REAL;
 	in_anty_tg : REAL;
+// krzywa cukrowa - na czczo, 1 i 2 h po przyjęciu glukozy
+	in_glukoza0: REAL;
+	in_glukoza1: REAL;
+	in_glukoza2: REAL;
+	in_insulina0 : REAL;
+	in_insulina1 : REAL;
+	in_insulina2 : REAL;
 // Badanie ogólne moczu
 	in_crp : REAL;
 	in_ob : REAL;
@@ -58,30 +66,40 @@ VAR_OUTPUT				// Prawdopodobieństwo występowania choroby
 	out_pochp : REAL;
 END_VAR
 
-FUZZIFY cisnienie_krwi			// Fuzzify input variable 'service': {'male', 'wnormie' , 'wysokie'}
-	TERM male := (0, 1) (4, 0) ;
-	TERM wnormie := (1, 0) (4,1) (6,1) (9,0);
-	TERM wysokie := (6, 0) (9, 1);
+// Ciśnienie skurczowe/rozkurczowe (mm Hg)
+// Optymalne	<120	<80
+// Prawidłowe	120—129	80—84
+// Wysokie prawidłowe	130—139	85—89
+
+FUZZIFY in_cisnienie_skurczowe
+	TERM niskie := (80, 1) (100, 0) ;
+	TERM prawidlowe := (80, 0) (100,1) (130,1) (150,0);
+	TERM wysokie := (130, 0) (150, 1);
 END_FUZZIFY
+
+FUZZIFY in_cisnienie_rozkurczowe
+	TERM niskie := (36, 1) (60, 0) ;
+	TERM prawidlowe := (36, 0) (60,1) (88,1) (92,0);
+	TERM wysokie := (88, 0) (92, 1);
+END_FUZZIFY	
 
 // bilirubina
 // 0,2-1,1 mg% (3,42-20,6 µmol/l)
-FUZZIFY bilirubina
+FUZZIFY in_bilirubina
 	TERM niska := (0, 1) (0.3, 0) ;
 	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
 	TERM wysoka := (0.9, 0) (1.2, 1);
 END_FUZZIFY
 
-
-DEFUZZIFY nadcisnienie_tetnicze			// Defzzzify output variable 'tip' : {'maloprawdopodobne', 'prawdopodobne', 'praktyczniepewne' }
-	TERM maloprawdopodobne := (0,0) (5,1) (10,0);
+DEFUZZIFY out_nadcisnienie_tetnicze			// Defzzzify output variable 'tip' : {'maloprawdopodobne', 'prawdopodobne', 'praktyczniepewne' }
+	TERM maloprawdopodobne := (0,1) (15,0);
 	TERM prawdopodobne := (10,0) (15,1) (20,0);
-	TERM praktyczniepewne := (20,0) (25,1) (30,0);
+	TERM praktyczniepewne := (20,0) (100, 1);
 	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
 	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
 END_DEFUZZIFY
 
-DEFUZZIFY zoltaczka_mechaniczna
+DEFUZZIFY out_zoltaczka_mechaniczna
 	TERM nie := (0,0) (5,1) (10,0);
 	TERM nie_wiem := (10,0) (15,1) (20,0);
 	TERM tak := (20,0) (25,1) (30,0);
@@ -89,7 +107,7 @@ DEFUZZIFY zoltaczka_mechaniczna
 	DEFAULT := -1;		// Default value is 0 (if no rule activates defuzzifier)
 END_DEFUZZIFY
 
-DEFUZZIFY zoltaczka_zakazna
+DEFUZZIFY out_zoltaczka_zakazna
 	TERM nie := (0,0) (5,1) (10,0);
 	TERM nie_wiem := (10,0) (15,1) (20,0);
 	TERM tak := (20,0) (25,1) (30,0);
@@ -103,9 +121,10 @@ RULEBLOCK No1
 	ACT : MIN;			// Use 'min' activation method
 	ACCU : MAX;			// Use 'max' accumulation method
 
-	RULE 1 : IF cisnienie_krwi IS wysokie THEN nadcisnienie_tetnicze IS prawdopodobne;
-	RULE 2 : IF bilirubina IS wysoka THEN zoltaczka_mechaniczna IS tak;
-	RULE 3 : IF bilirubina IS wysoka THEN zoltaczka_zakazna IS tak;
+	RULE 1 : IF in_cisnienie_skurczowe IS prawidlowe AND in_cisnienie_rozkurczowe IS prawidlowe THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
+	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
+	RULE 3 : IF in_bilirubina IS wysoka THEN out_zoltaczka_mechaniczna IS tak;
+	RULE 4 : IF in_bilirubina IS wysoka THEN out_zoltaczka_zakazna IS tak;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK
