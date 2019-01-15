@@ -1,7 +1,9 @@
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.text.DecimalFormat;
@@ -13,10 +15,10 @@ public class ViewController {
     @FXML
     private GridPane parametersGrid;
     @FXML
-    private TextArea doctorAnswer;
+    private GridPane doctorAnswer;
     private NumberFormat formatter = new DecimalFormat("#0.0");
     private FuzzyDoctor fuzzyDoctor = new FuzzyDoctor();
-    private List<String> parametesNames = new ArrayList<>();
+    private List<String> parametersNames = new ArrayList<>();
 
 
     public ViewController() {
@@ -25,34 +27,41 @@ public class ViewController {
 
     @FXML
     private void initialize() {
-        parametesNames.clear();
+        parametersNames.clear();
+        parametersGrid.setVgap(10.0);
         fuzzyDoctor.getInputVariables().forEach(this::addParameter);
     }
 
     private void addParameter(String parameterName) {
-        Label newLabel = new Label(parameterName.replace("in_", " "));
+        Label newLabel = new Label(parameterName.replace("in_", "").replace("_", " "));
+        newLabel.setWrapText(true);
         TextField newTextField = new TextField();
         newTextField.setId(parameterName);
+        Button showChartButton = new Button();
+
+        Image image = new Image(getClass().getResourceAsStream("chart.png"));
+        showChartButton.setGraphic(new ImageView(image));
+
+        showChartButton.setOnMouseClicked(new ShowParameterChartButtonClickHandler(parameterName, fuzzyDoctor));
 
         parametersGrid.getRowConstraints().size();
-        parametersGrid.addRow(parametesNames.size(), newLabel, newTextField);
-        parametesNames.add(parameterName);
+        parametersGrid.addRow(parametersNames.size(), showChartButton, newLabel, newTextField);
+        parametersNames.add(parameterName);
     }
 
     @FXML
     public void getDoctorAnalysis() {
         List<Parameter> parameters = getParametersFromFields();
-        FuzzyDoctor fuzzyDoctor = new FuzzyDoctor();
         List<Disease> diseases = fuzzyDoctor.makeAnalysis(parameters);
-        fuzzyDoctor.showFuzzyficationCharts();
-        fuzzyDoctor.showResultsCharts();
+//        fuzzyDoctor.showFuzzyficationCharts();
+//        fuzzyDoctor.showResultsCharts();
         printAnswer(diseases);
     }
 
     private List<Parameter> getParametersFromFields() {
         List<Parameter> parameters = new ArrayList<>();
         parametersGrid.getChildren().stream()
-                .filter(child -> parametesNames.contains(child.getId())
+                .filter(child -> parametersNames.contains(child.getId())
                         && ((TextField) child).getText() != null
                         && !((TextField) child).getText().equals(""))
                 .forEach(child -> parameters.add(getParameterFromField((TextField) child)));
@@ -64,10 +73,38 @@ public class ViewController {
     }
 
     private void printAnswer(List<Disease> diseases) {
-        doctorAnswer.clear();
-        diseases.stream()
-                .filter(disease -> disease.getValue() > -1)
-                .forEach(disease -> doctorAnswer.appendText(getDiseaseDescription(disease)));
+        doctorAnswer.getChildren().clear();
+        doctorAnswer.setVgap(20.0);
+        doctorAnswer.setHgap(5.0);
+        for (int i = 0; i < diseases.size(); i++) {
+            addDiseaseAnswerRow(diseases.get(i), i + 1);
+        }
+    }
+
+    private void addDiseaseAnswerRow(Disease disease, int index) {
+        if (disease.getValue() < 0) {
+            Label emptyLabel = new Label();
+            Label diseaseNameLabel = new Label(disease.getName().replace("out_", "")
+                    .replace("_", " ") + " : ");
+            diseaseNameLabel.setWrapText(true);
+            Label infoLabel = new Label("podano za mało danych, aby określenie było możliwe.");
+            infoLabel.setWrapText(true);
+            doctorAnswer.addRow(index, emptyLabel, diseaseNameLabel, infoLabel);
+        } else {
+            Label diseaseNameLabel = new Label(disease.getName().replace("out_", "")
+                    .replace("_", " ") + " : ");
+            diseaseNameLabel.setWrapText(true);
+            Label answer = new Label(getDiseaseDescription(disease));
+            answer.setWrapText(true);
+            Button showChartButton = new Button();
+            Image image = new Image(getClass().getResourceAsStream("chart.png"));
+            showChartButton.setGraphic(new ImageView(image));
+            showChartButton.setOnMouseClicked(
+                    new ShowDiseaseAnswerChartButtonClickHandler(disease.getName(), fuzzyDoctor));
+
+            doctorAnswer.getRowConstraints().size();
+            doctorAnswer.addRow(index, showChartButton, diseaseNameLabel, answer);
+        }
     }
 
     private String getDiseaseDescription(Disease disease) {
@@ -86,5 +123,6 @@ public class ViewController {
             return "bardzo wysokie prawdopodobienstwo, konieczna wizyta u prawdziwego lekarza";
         }
     }
+
 
 }
