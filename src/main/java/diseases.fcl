@@ -38,10 +38,10 @@ VAR_INPUT				// Odczyty badań pacjenta
 	in_ob : REAL;
 	in_glukoza_w_moczu : REAL;
 // Spirometria
-	in_obturacja : REAL;
-	in_restrykcja : REAL;
-	in_vc : REAL;
-	in_fev1 : REAL;
+//	in_obturacja : REAL;
+//	in_restrykcja : REAL;
+//	in_vc : REAL;
+//	in_fev1 : REAL;
 END_VAR
 
 VAR_OUTPUT				// Prawdopodobieństwo występowania choroby
@@ -63,7 +63,7 @@ VAR_OUTPUT				// Prawdopodobieństwo występowania choroby
 	out_niedokrwistosc_z_niedoboru_kwasu_foliowego : REAL;
 	out_choroba_hashimoto : REAL;
 	out_wzw : REAL;
-	out_pochp : REAL;
+//	out_pochp : REAL;
 END_VAR
 
 // Ciśnienie skurczowe/rozkurczowe (mm Hg)
@@ -92,79 +92,83 @@ FUZZIFY in_bilirubina
 END_FUZZIFY
 
 // hemoglobina
-// 
+// 11-18 g/dl
 FUZZIFY in_hemoglobina
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (10, 1) (12, 0) ;
+	TERM wnormie := (10, 0) (12,1) (17,1) (19,0);
+	TERM wysoka := (17, 0) (19, 1);
 END_FUZZIFY
 
 // żelazo
-// 
+// kobiety - 6,6-26 mmol/l (37-145 mg/dl)
+// mężczyźni - 10,6-28,3 mmol/l (50-158 mg/100dl)
 FUZZIFY in_zelazo
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (0, 1) (9, 0) ;
+	TERM wnormie := (5, 0) (9,1) (28,1) (40,0);
+	TERM wysoka := (28, 0) (40, 1);
 END_FUZZIFY
 
 // wit. B 12
-// 
+// Norma: 103-517 pmol/l (140-700 pg/ml).
 FUZZIFY in_wit_b12
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (90, 1) (105, 0) ;
+	TERM wnormie := (90, 0) (105,1) (510,1) (555,0);
+	TERM wysoka := (105, 0) (555, 1);
 END_FUZZIFY
 
 // amylaza
-// 
+// 25-125 U/I, przy czym u osób starszych jest on szerszy - 20-160 U/l.
 FUZZIFY in_amylaza
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (15, 1) (25, 0) ;
+	TERM wnormie := (15, 0) (25,1) (125,1) (150,0);
+	TERM wysoka := (125, 0) (150, 1);
 END_FUZZIFY
 
 // mcv
-// 
-FUZZIFY in_hemoglobina
-	TERM mala := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM duza := (0.9, 0) (1.2, 1);
+// 82-92 fl (femtolitrów; 1fl=1x10-15 litra).
+FUZZIFY in_mcv
+	TERM mala := (0, 1) (82, 0) ;
+	TERM wnormie := (0, 0) (82,1) (92,1) (100,0);
+	TERM duza := (92, 0) (100, 1);
 END_FUZZIFY
 
 // leukocytoza
-// 
+//  4–10 tys. komórek/µl
 FUZZIFY in_leukocytoza
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (3000, 1) (4000, 0) ;
+	TERM wnormie := (3000, 0) (4000,1) (10000,1) (11000,0);
+	TERM zwiekszona := (10000, 0) (11000, 1) (50000, 1);
 END_FUZZIFY
 
 // kwas foliowy
-// 
+// Norma: 4,1-20,4 nmol/l (1,8-9,0 ng/ml).
 FUZZIFY in_kwas_foliowy
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (0, 1) (3.5, 0) ;
+	TERM wnormie := (3.5, 0) (4.5,1) (19,1) (22,0);
+	TERM wysoka := (19, 0) (22, 1);
 END_FUZZIFY
+
+
+// cholesterol całkowity: 138-200 mg/dl (3,6-5,2 mmol/l); wartości graniczne - 200-250 mg/dl (5,2-6,5 mmol/l), wartości nieprawidłowe - powyżej 250 mg/dl (> 6,5 mmol/l)
+// LDL: poniżej 135 mg/dl (3,5 mmol/l); wartości graniczne - 135-155 mg/dl (3,5-4,0 mmol/l); wartości nieprawidłowe - powyżej 155 mg/dl (4,0 mmol/l)
+// HDL - wartości prawidłowe dla mężczyzn: 35-70 mg/dl (0,9-1,8 mmol/l); dla kobiet: 40-80 mg/dl (1,0-2,1 mmol/l)
 
 // HDL
 // 
 FUZZIFY in_hdl
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM wnormie := (35, 0) (40,1) (70,1) (85,0);
 END_FUZZIFY
 
 // LDL
 // 
 FUZZIFY in_ldl
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (0, 1) (135, 0) ;
+	TERM graniczne := (135, 0) (140,1) (150,1) (155,0);
+	TERM nieprawidlowe := (150, 0) (155, 1);
 END_FUZZIFY
 
 // triglicerydy
-// 
+// ????
 FUZZIFY in_triglicerydy
 	TERM niska := (0, 1) (0.3, 0) ;
 	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
@@ -172,119 +176,116 @@ FUZZIFY in_triglicerydy
 END_FUZZIFY
 
 // glukoza na czczo
-// 
+// Norma: od 70 do 99 mg/dL (od 3.9 do 5.5 mmol/L)
 FUZZIFY in_glukoza0
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (60, 1) (70, 0) ;
+	TERM prawidlowa := (60, 0) (70, 1) (90, 1) (105,0);
+	TERM wysoka := (90, 0) (105,1) (120,1) (130,0);
+	TERM bardzowysoka := (120, 0) (130, 1);
 END_FUZZIFY
 
 // glukoza po 1 h
-// 
+// ?????
 FUZZIFY in_glukoza1
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (60, 1) (70, 0) ;
+	TERM prawidlowa := (60, 0) (70, 1) (90, 1) (105,0);
+	TERM wysoka := (90, 0) (105,1) (120,1) (130,0);
+	TERM bardzowysoka := (120, 0) (130, 1);
 END_FUZZIFY
 
 // glukoza po 2 h
 // 
 FUZZIFY in_glukoza2
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM prawidlowa := (135, 1) (145, 0) ;
+	TERM wysoka := (135, 0) (145, 1) (190, 1) (210,0);
+	TERM bardzowysoka := (190, 0) (210,1) ;
 END_FUZZIFY
 
 // insulina na czczo
-// 
+// norma 3-25 mU/l
 FUZZIFY in_insulina0
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM prawidlowa := (25, 1) (30, 0) ;
+	TERM wysoka := (25, 0) (30,1);
 END_FUZZIFY
 
 // insulina po 1 h
-// 
+// ????
 FUZZIFY in_insulina1
 	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM prawidlowa := (0, 1) (0.3, 0) ;
+	TERM wysoka := (0, 0) (0.3,1) (0.9,1) (1.2,0);
+	TERM bardzowysoka := (0.9, 0) (1.2, 1);
 END_FUZZIFY
 
 // insulina po 2 h
 // 
 FUZZIFY in_insulina2
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM prawidlowa := (50, 1) (60, 0) ;
+	TERM wysoka := (50, 0) (60,1);
 END_FUZZIFY
 
 // kreatynina
-// 
+// Norma dla kreatyniny to 53-115 µmol/l (0,6-1,3 mg/dl).
 FUZZIFY in_kreatynina
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (50, 1) (55, 0) ;
+	TERM wnormie := (50, 0) (55,1) (110,1) (120,0);
+	TERM wysoka := (110, 0) (120, 1);
 END_FUZZIFY
 
 // mocznik
-// 
+// ?????
 FUZZIFY in_mocznik
 	TERM niska := (0, 1) (0.3, 0) ;
 	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
 	TERM wysoka := (0.9, 0) (1.2, 1);
 END_FUZZIFY
 
-// mocznik
-// 
+// ASPAT
+//  5 do 40 U/l
+//  b.wysoka 400 do 4000 U/l 
 FUZZIFY in_aspat
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM wnormie := (0, 1) (40, 1) (50, 0) ;
+	TERM wysoka := (40, 0) (50,1) (400,1) (400,0);
+	TERM bardzowysoka := (300, 0) (400, 1);
 END_FUZZIFY
 
 // ALAT
-// 
+//  5 do 40 U/l
+//  b.wysoka 400 do 4000 U/l 
 FUZZIFY in_alat
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM wnormie := (0, 1) (40, 1) (50, 0) ;
+	TERM wysoka := (40, 0) (50,1) (400,1) (400,0);
+	TERM bardzowysoka := (300, 0) (400, 1);
 END_FUZZIFY
 
 // GGTP
-// 
+// GGTP u kobiet wynoszą poniżej 35 IU/l, a u mężczyzn poniżej 40 IU/l.
 FUZZIFY in_ggtp
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM wnormie := (0,1) (40, 1) (50,0);
+	TERM wysoka := (40, 0) (50, 1);
 END_FUZZIFY
 
 // TSH
 // 
 FUZZIFY in_tsh
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM niska := (0, 1) (1,1) (2,0);
+	TERM wnormie := (1, 0) (2,1) (5,0);
+	TERM wysoka := (4, 0) (5, 1);
 END_FUZZIFY
 
 // przeciwciała anty-TPO
 // 
 FUZZIFY in_anty_tpo
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM wnormie := (0, 1) (30, 1) (40,0);
+	TERM podwyzszone := (30, 0) (40, 1);
 END_FUZZIFY
 
 // przeciwciała anty-TG
 // 
 FUZZIFY in_anty_tg
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM wnormie := (0, 1) (110, 1) (120,0);
+	TERM podwyzszone := (110, 0) (120, 1);
 END_FUZZIFY
-
-
-
 
 // CRP
 // 3,1 - 10 mg/l
@@ -319,9 +320,9 @@ DEFUZZIFY out_nadcisnienie_tetnicze			// Defzzzify output variable 'tip' : {'mal
 END_DEFUZZIFY
 
 DEFUZZIFY out_zoltaczka_mechaniczna
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;		
 END_DEFUZZIFY
@@ -358,6 +359,110 @@ DEFUZZIFY out_cukrzyca
 	DEFAULT := -1;
 END_DEFUZZIFY
 
+DEFUZZIFY out_niewydolnosc_nerek
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_niedoczynnosc_tarczycy
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_nadczynnosc_tarczycy
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_zakazenie_drog_moczowych
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_ostry_stan_zapalny
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_choroba_nowotworowa
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_zapalenie_trzustki
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_zapalenie_trzustki
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_niedokrwistosc_z_niedoboru_zelaza
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_niedokrwistosc_z_niedoboru_wit_b12
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_niedokrwistosc_z_niedoboru_kwasu_foliowego
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_choroba_hashimoto
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_wzw
+	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
+	TERM prawdopodobne := (10,0) (20,1) (40,0);
+	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
 
 RULEBLOCK No1
 	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
@@ -366,11 +471,28 @@ RULEBLOCK No1
 
 	RULE 1 : IF in_cisnienie_skurczowe IS prawidlowe AND in_cisnienie_rozkurczowe IS prawidlowe THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
 	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
-	RULE 3 : IF in_bilirubina IS wysoka THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
-	RULE 4 : IF in_bilirubina IS wysoka THEN out_zoltaczka_zakazna IS praktyczniepewne;
-	//RULE 5 : IF in_glukoza0 IS wysoka AND insulina0 IS wysoka THEN out_insulinoopornosc IS praktyczniepewne;
-	//RULE 6 : IF in_glukoza0 IS wysoka AND insulina0 IS wysoka THEN out_stan_przedcukrzycowy IS praktyczniepewne;
-	//RULE 7 : IF in_glukoza0 IS wysoka AND insulina0 IS wysoka AND in_glukoza_w_moczu IS wysoka THEN out_cukrzyca IS praktyczniepewne;
+	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
+	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
+	RULE 4 : IF in_bilirubina IS wysoka AND in_crp IS wysoka THEN out_zoltaczka_zakazna IS praktyczniepewne;
+	RULE 5 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_insulinoopornosc IS praktyczniepewne;
+	RULE 6 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_stan_przedcukrzycowy IS praktyczniepewne;
+	RULE 7 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka AND in_glukoza_w_moczu IS wysoka THEN out_cukrzyca IS praktyczniepewne;
+	RULE 8 : IF in_cisnienie_skurczowe IS wysokie AND in_kreatynina IS wysoka THEN out_niewydolnosc_nerek IS prawdopodobne;
+	RULE 9 : IF in_cisnienie_skurczowe IS wysokie AND in_zelazo IS niska AND in_kreatynina IS wysoka THEN out_niewydolnosc_nerek IS praktyczniepewne;
+	RULE 10 : IF in_ldl IS graniczne AND in_tsh IS wysoka THEN out_niedoczynnosc_tarczycy IS prawdopodobne;
+	RULE 11 : IF in_tsh IS niska THEN out_nadczynnosc_tarczycy IS praktyczniepewne;
+	RULE 12 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS prawdopodobne;
+	RULE 13 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS praktyczniepewne;
+	RULE 14 : IF in_ob IS wysoka THEN out_choroba_nowotworowa IS prawdopodobne;
+	RULE 15 : IF in_ob IS ekstremalna THEN out_choroba_nowotworowa IS praktyczniepewne;
+	RULE 16 : IF in_crp IS ekstremalna THEN out_ostry_stan_zapalny IS praktyczniepewne;
+	RULE 17 : IF in_amylaza IS wysoka AND in_crp IS wysoka THEN out_zapalenie_trzustki IS praktyczniepewne;
+	RULE 18 : IF in_hemoglobina IS niska AND in_zelazo IS niska AND in_mcv IS duza THEN out_niedokrwistosc_z_niedoboru_zelaza IS praktyczniepewne;
+	RULE 19 : IF in_hemoglobina IS niska AND in_wit_b12 IS niska AND in_mcv IS mala THEN out_niedokrwistosc_z_niedoboru_wit_b12 IS praktyczniepewne;
+	RULE 20 : IF in_mcv IS duza AND in_kwas_foliowy IS niska THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS prawdopodobne;
+	RULE 21 : IF in_mcv IS duza AND in_kwas_foliowy IS niska AND in_zelazo IS wnormie THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS praktyczniepewne;
+	RULE 22 : IF in_leukocytoza IS zwiekszona AND in_crp IS wysoka THEN out_zakazenie_drog_moczowych IS prawdopodobne;
+	RULE 23 : IF in_leukocytoza IS zwiekszona AND (in_aspat IS wysoka OR in_aspat IS bardzowysoka OR in_alat IS wysoka OR in_alat IS bardzowysoka) THEN out_wzw IS prawdopodobne;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK
