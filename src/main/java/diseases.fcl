@@ -16,9 +16,9 @@ VAR_INPUT				// Odczyty badań pacjenta
 	in_kwas_foliowy : REAL;
 	in_hdl : REAL;
 	in_ldl : REAL;
-	in_triglicerydy : REAL;	
+	//in_triglicerydy : REAL;	
 	in_kreatynina : REAL;
-	in_mocznik : REAL;
+	//in_mocznik : REAL;
 	in_aspat : REAL;
 	in_alat : REAL;
 	in_alp : REAL;
@@ -167,14 +167,6 @@ FUZZIFY in_ldl
 	TERM nieprawidlowe := (150, 0) (155, 1);
 END_FUZZIFY
 
-// triglicerydy
-// ????
-FUZZIFY in_triglicerydy
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
-END_FUZZIFY
-
 // glukoza na czczo
 // Norma: od 70 do 99 mg/dL (od 3.9 do 5.5 mmol/L)
 FUZZIFY in_glukoza0
@@ -230,14 +222,6 @@ FUZZIFY in_kreatynina
 	TERM niska := (50, 1) (55, 0) ;
 	TERM wnormie := (50, 0) (55,1) (110,1) (120,0);
 	TERM wysoka := (110, 0) (120, 1);
-END_FUZZIFY
-
-// mocznik
-// ?????
-FUZZIFY in_mocznik
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
 END_FUZZIFY
 
 // ASPAT
@@ -337,8 +321,8 @@ END_DEFUZZIFY
 
 DEFUZZIFY out_insulinoopornosc
 	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM prawdopodobne := (10,0) (20,1) (80,1) (100,0);
+	TERM praktyczniepewne := (80,0) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
@@ -469,29 +453,39 @@ RULEBLOCK No1
 	ACT : MIN;			// Use 'min' activation method
 	ACCU : MAX;			// Use 'max' accumulation method
 
+	// nadciśnienie tętnicze
 	RULE 1 : IF in_cisnienie_skurczowe IS prawidlowe AND in_cisnienie_rozkurczowe IS prawidlowe THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
 	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
+	// żółtaczki
 	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
 	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
 	RULE 4 : IF in_bilirubina IS wysoka AND in_crp IS wysoka THEN out_zoltaczka_zakazna IS praktyczniepewne;
+	// cukrzyca/insulinooporność
 	RULE 5 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_insulinoopornosc IS praktyczniepewne;
 	RULE 6 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_stan_przedcukrzycowy IS praktyczniepewne;
 	RULE 7 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka AND in_glukoza_w_moczu IS wysoka THEN out_cukrzyca IS praktyczniepewne;
+	// niewydolność nerek
 	RULE 8 : IF in_cisnienie_skurczowe IS wysokie AND in_kreatynina IS wysoka THEN out_niewydolnosc_nerek IS prawdopodobne;
 	RULE 9 : IF in_cisnienie_skurczowe IS wysokie AND in_zelazo IS niska AND in_kreatynina IS wysoka THEN out_niewydolnosc_nerek IS praktyczniepewne;
+	// tarczycowe
 	RULE 10 : IF in_ldl IS graniczne AND in_tsh IS wysoka THEN out_niedoczynnosc_tarczycy IS prawdopodobne;
 	RULE 11 : IF in_tsh IS niska THEN out_nadczynnosc_tarczycy IS praktyczniepewne;
 	RULE 12 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS prawdopodobne;
 	RULE 13 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS praktyczniepewne;
+	// nowotworowe
 	RULE 14 : IF in_ob IS wysoka THEN out_choroba_nowotworowa IS prawdopodobne;
 	RULE 15 : IF in_ob IS ekstremalna THEN out_choroba_nowotworowa IS praktyczniepewne;
+	// stan zapalny
 	RULE 16 : IF in_crp IS ekstremalna THEN out_ostry_stan_zapalny IS praktyczniepewne;
 	RULE 17 : IF in_amylaza IS wysoka AND in_crp IS wysoka THEN out_zapalenie_trzustki IS praktyczniepewne;
+	// niedokrwistości
 	RULE 18 : IF in_hemoglobina IS niska AND in_zelazo IS niska AND in_mcv IS duza THEN out_niedokrwistosc_z_niedoboru_zelaza IS praktyczniepewne;
 	RULE 19 : IF in_hemoglobina IS niska AND in_wit_b12 IS niska AND in_mcv IS mala THEN out_niedokrwistosc_z_niedoboru_wit_b12 IS praktyczniepewne;
 	RULE 20 : IF in_mcv IS duza AND in_kwas_foliowy IS niska THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS prawdopodobne;
 	RULE 21 : IF in_mcv IS duza AND in_kwas_foliowy IS niska AND in_zelazo IS wnormie THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS praktyczniepewne;
+	// zakażenie dróg moczowych
 	RULE 22 : IF in_leukocytoza IS zwiekszona AND in_crp IS wysoka THEN out_zakazenie_drog_moczowych IS prawdopodobne;
+	// WZW
 	RULE 23 : IF in_leukocytoza IS zwiekszona AND (in_aspat IS wysoka OR in_aspat IS bardzowysoka OR in_alat IS wysoka OR in_alat IS bardzowysoka) THEN out_wzw IS prawdopodobne;
 END_RULEBLOCK
 

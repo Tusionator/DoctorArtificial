@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewController {
     @FXML
@@ -29,7 +30,7 @@ public class ViewController {
     private void initialize() {
         parametersNames.clear();
         parametersGrid.setVgap(10.0);
-        fuzzyDoctor.getInputVariables().forEach(this::addParameter);
+        fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList()).forEach(this::addParameter);
     }
 
     private void addParameter(String parameterName) {
