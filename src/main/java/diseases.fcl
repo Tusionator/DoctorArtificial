@@ -2,8 +2,6 @@ FUNCTION_BLOCK fuzzyLogicDoctor	// Block definition (there may be more than one 
 
 VAR_INPUT				// Odczyty badań pacjenta
 // Morfologia krwi
-	in_is_woman : REAL; // 0 - mężczyzna 1 - kobieta 2 - kobieta w ciąży
-	in_age : REAL;
 	in_cisnienie_skurczowe : REAL;
 	in_cisnienie_rozkurczowe : REAL;
 	in_bilirubina : REAL;
@@ -21,7 +19,6 @@ VAR_INPUT				// Odczyty badań pacjenta
 	//in_mocznik : REAL;
 	in_aspat : REAL;
 	in_alat : REAL;
-	in_alp : REAL;
 	in_ggtp : REAL;
 	in_tsh : REAL;
 	in_anty_tpo : REAL;
@@ -72,15 +69,15 @@ END_VAR
 // Wysokie prawidłowe	130—139	85—89
 
 FUZZIFY in_cisnienie_skurczowe
-	TERM niskie := (80, 1) (100, 0) ;
+	TERM niskie := (0, 1) (80, 1) (100, 0) ;
 	TERM prawidlowe := (80, 0) (100,1) (130,1) (150,0);
-	TERM wysokie := (130, 0) (150, 1);
+	TERM wysokie := (130, 0) (150, 1) (200, 1);
 END_FUZZIFY
 
 FUZZIFY in_cisnienie_rozkurczowe
-	TERM niskie := (36, 1) (60, 0) ;
+	TERM niskie := (0, 1) (36, 1) (60, 0) ;
 	TERM prawidlowe := (36, 0) (60,1) (88,1) (92,0);
-	TERM wysokie := (88, 0) (92, 1);
+	TERM wysokie := (88, 0) (92, 1) (200, 1);
 END_FUZZIFY	
 
 // bilirubina
@@ -229,8 +226,8 @@ END_FUZZIFY
 //  b.wysoka 400 do 4000 U/l 
 FUZZIFY in_aspat
 	TERM wnormie := (0, 1) (40, 1) (50, 0) ;
-	TERM wysoka := (40, 0) (50,1) (400,1) (400,0);
-	TERM bardzowysoka := (300, 0) (400, 1);
+	TERM wysoka := (40, 0) (50,1) (300,1) (400,0);
+	TERM bardzowysoka := (300, 0) (400, 1) (4000,1) (5000,0);
 END_FUZZIFY
 
 // ALAT
@@ -238,8 +235,8 @@ END_FUZZIFY
 //  b.wysoka 400 do 4000 U/l 
 FUZZIFY in_alat
 	TERM wnormie := (0, 1) (40, 1) (50, 0) ;
-	TERM wysoka := (40, 0) (50,1) (400,1) (400,0);
-	TERM bardzowysoka := (300, 0) (400, 1);
+	TERM wysoka := (40, 0) (50,1) (300,1) (400,0);
+	TERM bardzowysoka := (300, 0) (400, 1) (4000,1) (5000,0);
 END_FUZZIFY
 
 // GGTP
@@ -253,7 +250,7 @@ END_FUZZIFY
 // 
 FUZZIFY in_tsh
 	TERM niska := (0, 1) (1,1) (2,0);
-	TERM wnormie := (1, 0) (2,1) (5,0);
+	TERM wnormie := (1, 0) (2,1) (4,1) (5,0);
 	TERM wysoka := (4, 0) (5, 1);
 END_FUZZIFY
 
@@ -261,14 +258,14 @@ END_FUZZIFY
 // 
 FUZZIFY in_anty_tpo
 	TERM wnormie := (0, 1) (30, 1) (40,0);
-	TERM podwyzszone := (30, 0) (40, 1);
+	TERM podwyzszone := (30, 0) (40, 1) (400, 1);
 END_FUZZIFY
 
 // przeciwciała anty-TG
 // 
 FUZZIFY in_anty_tg
 	TERM wnormie := (0, 1) (110, 1) (120,0);
-	TERM podwyzszone := (110, 0) (120, 1);
+	TERM podwyzszone := (110, 0) (120, 1) (400, 1);
 END_FUZZIFY
 
 // CRP
@@ -285,7 +282,7 @@ END_FUZZIFY
 FUZZIFY in_ob
 	TERM wnormie := (0, 1) (11.5, 1) (12.5, 0) ;
 	TERM wysoka := (11.5, 0) (12.5,1) (14.5,1) (15.5,0);
-	TERM ekstremalna := (14.5, 0) (14.5, 1);
+	TERM ekstremalna := (14.5, 0) (15.5, 1) (100, 1);
 END_FUZZIFY
 
 // glukoza w moczu
@@ -385,8 +382,8 @@ END_DEFUZZIFY
 
 DEFUZZIFY out_choroba_nowotworowa
 	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM prawdopodobne := (10,0) (20,1) (60,1) (80, 0);
+	TERM praktyczniepewne := (60,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
@@ -454,11 +451,12 @@ RULEBLOCK No1
 	ACCU : MAX;			// Use 'max' accumulation method
 
 	// nadciśnienie tętnicze
+	RULE 1 : IF in_cisnienie_skurczowe IS niskie AND in_cisnienie_rozkurczowe IS niskie THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
 	RULE 1 : IF in_cisnienie_skurczowe IS prawidlowe AND in_cisnienie_rozkurczowe IS prawidlowe THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
 	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
 	// żółtaczki
-	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
-	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
+	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS prawdopodobne;
+	RULE 24 : IF in_bilirubina IS wysoka AND in_crp IS wnormie AND (in_aspat IS wysoka  OR in_aspat IS bardzowysoka)THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
 	RULE 4 : IF in_bilirubina IS wysoka AND in_crp IS wysoka THEN out_zoltaczka_zakazna IS praktyczniepewne;
 	// cukrzyca/insulinooporność
 	RULE 5 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_insulinoopornosc IS praktyczniepewne;
@@ -473,7 +471,8 @@ RULEBLOCK No1
 	RULE 12 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS prawdopodobne;
 	RULE 13 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS praktyczniepewne;
 	// nowotworowe
-	RULE 14 : IF in_ob IS wysoka THEN out_choroba_nowotworowa IS prawdopodobne;
+	RULE 14 : IF in_ob IS wnormie THEN out_choroba_nowotworowa IS maloprawdopodobne;
+	RULE 25 : IF in_ob IS wysoka THEN out_choroba_nowotworowa IS prawdopodobne;
 	RULE 15 : IF in_ob IS ekstremalna THEN out_choroba_nowotworowa IS praktyczniepewne;
 	// stan zapalny
 	RULE 16 : IF in_crp IS ekstremalna THEN out_ostry_stan_zapalny IS praktyczniepewne;
