@@ -153,9 +153,7 @@ public class ViewController {
     }
     private Disease diseaseProperties(Disease d) {
     	Optional <Disease> dd = diseaseList.stream().filter(x->x.getName().equals(d.getName())).findFirst();
-        if(dd.isPresent()) {
-            	System.out.println("XD : "+dd.get().getLabel());
-            	
+        if(dd.isPresent()) {            	
         	return dd.get();
         } else {
         	d.setLabel(d.getName());

@@ -1,5 +1,3 @@
-import java.net.URI;
-
 public class Disease {
     private String name;
     private String label;
@@ -29,7 +27,7 @@ public class Disease {
         this.label = label;
     }
 
-    public URI getUrl() {
+    public String getUrl() {
         return url;
     }
 
