@@ -5,25 +5,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import java.io.File;
-import java.io.IOException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class ViewController {
     @FXML
@@ -32,64 +30,60 @@ public class ViewController {
     private GridPane doctorAnswer;
     private NumberFormat formatter = new DecimalFormat("#0.0");
     private FuzzyDoctor fuzzyDoctor = new FuzzyDoctor();
-    //private List<String> parametersNames = new ArrayList<>();
     private List<Parameter> paramList = new ArrayList<Parameter>();
     private List<Disease> diseaseList = new ArrayList<Disease>();
 
     public ViewController() {
-
     }
 
     @FXML
     private void initialize() {
-        //parametersNames.clear();
         parametersGrid.setVgap(10.0);
         parametersGrid.setHgap(5.0);
         loadXML();
-        //fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList()).forEach(this::addParameter);
-        
+
         // szukaj etykiety dla każdej ze znalezionych automatycznie zmiennych wejściowych
         int np = 0;
-        for(String s : fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList())) {
-        	Optional<Parameter> optional = paramList.stream()
+        for (String s : fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList())) {
+            Optional<Parameter> optional = paramList.stream()
                     .filter(x -> s.equals(x.getName()))
                     .findFirst();
-			if(optional.isPresent()) {
-				Parameter p = optional.get();
-				addParameter(p,np++);
-			} else {
-				// nie ma etykiety, dodaj z nazwą zmiennej jako etykietą
-				addParameter(new Parameter(s,s,"?",1),np++);
-			}
+            if (optional.isPresent()) {
+                Parameter p = optional.get();
+                addParameter(p, np++);
+            } else {
+                // nie ma etykiety, dodaj z nazwą zmiennej jako etykietą
+                addParameter(new Parameter(s, s, "?", 1), np++);
+            }
         }
     }
-    
+
     // odczytywanie etykiet parametrów wejściowych z pliku XML
     private void loadXML() {
-  	  String filePath = "./src/main/resources/parameters.xml";
-          File xmlFile = new File(filePath);
-          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-          DocumentBuilder dBuilder;
-          
-          try {
-        	  dBuilder = dbFactory.newDocumentBuilder();
-              Document doc = dBuilder.parse(xmlFile);
-              doc.getDocumentElement().normalize();
-              
-              NodeList paramNodeList = doc.getElementsByTagName("parameter");
-              for (int i = 0; i < paramNodeList.getLength(); i++)
-                 paramList.add(xmlParam(paramNodeList.item(i)));
-              
-              // choroby
-              NodeList diseaseNodeList = doc.getElementsByTagName("disease");
-              for (int i = 0; i < diseaseNodeList.getLength(); i++)
+        String filePath = "./src/main/resources/parameters.xml";
+        File xmlFile = new File(filePath);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder;
+
+        try {
+            dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xmlFile);
+            doc.getDocumentElement().normalize();
+
+            NodeList paramNodeList = doc.getElementsByTagName("parameter");
+            for (int i = 0; i < paramNodeList.getLength(); i++)
+                paramList.add(xmlParam(paramNodeList.item(i)));
+
+            // choroby
+            NodeList diseaseNodeList = doc.getElementsByTagName("disease");
+            for (int i = 0; i < diseaseNodeList.getLength(); i++)
                 diseaseList.add(xmlDisease(diseaseNodeList.item(i)));
-              
-          } catch (SAXException | ParserConfigurationException | IOException e1) {
-             e1.printStackTrace();
-          }
+
+        } catch (SAXException | ParserConfigurationException | IOException e1) {
+            e1.printStackTrace();
+        }
     }
-    
+
     // utworzenie obiektu Parameter na podstawie właściwości zapisanych w węzle XML-a
     private Parameter xmlParam(Node node) {
         Parameter item = new Parameter("test", "test", "???", 0.0);
@@ -102,7 +96,7 @@ public class ViewController {
 
         return item;
     }
-    
+
     // utworzenie obiektu Disease na podstawie właściwości zapisanych w węzle XML-a
     private Disease xmlDisease(Node node) {
         Disease item = new Disease("test-n", "test-l", "url", -1.0);
@@ -114,17 +108,17 @@ public class ViewController {
         }
         return item;
     }
-    
+
     private static String getTagValue(String tag, Element element) {
         NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
-        if(nodeList.getLength() > 0) {
-	        Node node = (Node) nodeList.item(0);
-	        return node.getNodeValue();
+        if (nodeList.getLength() > 0) {
+            Node node = (Node) nodeList.item(0);
+            return node.getNodeValue();
         } else return "";
     }
 
     private void addParameter(Parameter param, int row) {
-        Label newLabel = new Label(param.getLabel()+" ["+param.getUnit()+"]");
+        Label newLabel = new Label(param.getLabel() + " [" + param.getUnit() + "]");
         newLabel.setWrapText(true);
         TextField newTextField = new TextField();
         newTextField.setId(param.getName());
@@ -145,22 +139,21 @@ public class ViewController {
         List<Parameter> parameters = getParametersFromFields();
         List<Disease> diseases = fuzzyDoctor.makeAnalysis(parameters);
         // dodanie etykiet
-        for(int i = 0; i<diseases.size();++i) {
-           diseases.set(i, diseaseProperties(diseases.get(i)));
+        for (int i = 0; i < diseases.size(); ++i) {
+            diseases.set(i, diseaseProperties(diseases.get(i)));
         }
-//        fuzzyDoctor.showFuzzyficationCharts();
-//        fuzzyDoctor.showResultsCharts();
         printAnswer(diseases);
     }
+
     private Disease diseaseProperties(Disease d) {
-    	Optional <Disease> dd = diseaseList.stream().filter(x->x.getName().equals(d.getName())).findFirst();
-        if(dd.isPresent()) {
-        	Disease disease = dd.get();
-        	disease.setValue(d.getValue());
-        	return disease;
+        Optional<Disease> dd = diseaseList.stream().filter(x -> x.getName().equals(d.getName())).findFirst();
+        if (dd.isPresent()) {
+            Disease disease = dd.get();
+            disease.setValue(d.getValue());
+            return disease;
         } else {
-        	d.setLabel(d.getName());
-        	return d;
+            d.setLabel(d.getName());
+            return d;
         }
     }
 
@@ -173,7 +166,7 @@ public class ViewController {
                         && ((TextField) child).getText() != null
                         && !((TextField) child).getText().equals(""))
                 .forEach(child -> parameters.add(getParameterFromField((TextField) child)));
-        
+
         return parameters;
     }
 
@@ -181,13 +174,13 @@ public class ViewController {
         Optional<Parameter> optional = paramList.stream()
                 .filter(x -> parameterField.getId().equals(x.getName()))
                 .findFirst();
-        if(optional.isPresent()) {
-        	Parameter p = optional.get();
-        	p.setValue(Double.parseDouble(parameterField.getText()));
-        	return p;
+        if (optional.isPresent()) {
+            Parameter p = optional.get();
+            p.setValue(Double.parseDouble(parameterField.getText()));
+            return p;
         } else {
-			return (new Parameter("error","error","?",1));
-		}
+            return (new Parameter("error", "error", "?", 1));
+        }
     }
 
     private void printAnswer(List<Disease> diseases) {
@@ -200,7 +193,7 @@ public class ViewController {
     }
 
     private void addDiseaseAnswerRow(Disease disease, int index) {
-    	String labelText = disease.getLabel();
+        String labelText = disease.getLabel();
         if (disease.getValue() < 0) {
             Label emptyLabel = new Label();
             Label diseaseNameLabel = new Label(labelText);
@@ -235,7 +228,6 @@ public class ViewController {
     }
 
     private String getDiseaseDescription(Disease disease) {
-
         return "prawdopodobieństwo wystąpienia " + formatter.format(disease.getValue()) + "% ("
                 + getVerboseProbability(disease.getValue()) + ")\n";
     }
@@ -249,6 +241,4 @@ public class ViewController {
             return "bardzo wysokie prawdopodobieństwo, konieczna wizyta u prawdziwego lekarza";
         }
     }
-
-
 }

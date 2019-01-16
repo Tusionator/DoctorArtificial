@@ -59,12 +59,6 @@ public class FuzzyDoctor {
                 .filter(s -> s.matches("out_\\S+")).collect(Collectors.toList());
     }
 
-    public void showResultsCharts() {
-        getOutputVariables().stream()
-                .filter(diseaseName -> fis.getVariable(diseaseName).getValue() > -1)
-                .forEach(this::showDiseasesChart);
-    }
-
     public void showDiseasesChart(String diseaseName) {
         Variable disease = functionBlock.getVariable(diseaseName);
         JFuzzyChart.get().chart(disease, disease.getDefuzzifier(), true);
@@ -73,9 +67,5 @@ public class FuzzyDoctor {
     public void showParameterChart(String diseaseName) {
         Variable disease = functionBlock.getVariable(diseaseName);
         JFuzzyChart.get().chart(disease, true);
-    }
-
-    public void showFuzzyficationCharts() {
-        JFuzzyChart.get().chart(fis.getFunctionBlock(FUNCTION_BLOCK_NAME));
     }
 }
