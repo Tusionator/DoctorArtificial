@@ -93,7 +93,7 @@ END_FUZZIFY
 FUZZIFY in_hemoglobina
 	TERM niska := (0, 1) (10, 1) (12, 0) ;
 	TERM wnormie := (10, 0) (12,1) (17,1) (19,0);
-	TERM wysoka := (17, 0) (19, 1);
+	TERM wysoka := (17, 0) (19, 1) (50, 1);
 END_FUZZIFY
 
 // żelazo
@@ -201,7 +201,7 @@ END_FUZZIFY
 FUZZIFY in_kreatynina
 	TERM niska := (0, 1) (50, 1) (55, 0) ;
 	TERM wnormie := (50, 0) (55,1) (110,1) (120,0);
-	TERM wysoka := (110, 0) (120, 1);
+	TERM wysoka := (110, 0) (120, 1) (500, 1);
 END_FUZZIFY
 
 // ASPAT
@@ -234,7 +234,7 @@ END_FUZZIFY
 FUZZIFY in_tsh
 	TERM niska := (0, 1) (1,1) (2,0);
 	TERM wnormie := (1, 0) (2,1) (4,1) (5,0);
-	TERM wysoka := (4, 0) (5, 1);
+	TERM wysoka := (4, 0) (5, 1) (20, 1);
 END_FUZZIFY
 
 // przeciwciała anty-TPO

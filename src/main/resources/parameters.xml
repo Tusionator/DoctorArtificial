@@ -169,7 +169,7 @@
       <label>Cukrzyca</label>
 	  <url></url>
    </disease>
-   <disease id = "out_stanp_rzedcukrzycowy">
+   <disease id = "out_stanp_przedcukrzycowy">
       <label>Stan przedcukrzycowy</label>
 	  <url></url>
    </disease>
