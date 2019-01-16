@@ -236,18 +236,17 @@ public class ViewController {
 
     private String getDiseaseDescription(Disease disease) {
 
-        return disease.getName().replace("_", " ") + " : "
-                + "prawdopodobienstwo wystapienia " + formatter.format(disease.getValue()) + "% ("
+        return "prawdopodobieństwo wystąpienia " + formatter.format(disease.getValue()) + "% ("
                 + getVerboseProbability(disease.getValue()) + ")\n";
     }
 
     private String getVerboseProbability(double probability) {
         if (probability < 30) {
-            return "male prawdopodobienstwo";
+            return "małe prawdopodobieństwo";
         } else if (probability < 70) {
-            return "srednie prawdopobodienstwo, zalecane wiecej badan";
+            return "średnie prawdopodobieństwo, zalecane wiecej badań";
         } else {
-            return "bardzo wysokie prawdopodobienstwo, konieczna wizyta u prawdziwego lekarza";
+            return "bardzo wysokie prawdopodobieństwo, konieczna wizyta u prawdziwego lekarza";
         }
     }
 
