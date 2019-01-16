@@ -28,7 +28,7 @@
                         </AnchorPane>
                     </content>
                 </ScrollPane>
-                <Label alignment="CENTER" layoutX="128.0" layoutY="30.0" prefHeight="30.0" text="Paramerty" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Label alignment="CENTER" layoutX="128.0" layoutY="30.0" prefHeight="30.0" text="Parametry" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <font>
                         <Font size="21.0" />
                     </font>

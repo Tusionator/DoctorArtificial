@@ -10,7 +10,20 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class ViewController {
     @FXML
@@ -19,8 +32,8 @@ public class ViewController {
     private GridPane doctorAnswer;
     private NumberFormat formatter = new DecimalFormat("#0.0");
     private FuzzyDoctor fuzzyDoctor = new FuzzyDoctor();
-    private List<String> parametersNames = new ArrayList<>();
-
+    //private List<String> parametersNames = new ArrayList<>();
+    private List<Parameter> paramList = new ArrayList<Parameter>();
 
     public ViewController() {
 
@@ -28,26 +41,84 @@ public class ViewController {
 
     @FXML
     private void initialize() {
-        parametersNames.clear();
+        //parametersNames.clear();
         parametersGrid.setVgap(10.0);
-        fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList()).forEach(this::addParameter);
+        loadXML();
+        //fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList()).forEach(this::addParameter);
+        
+        // szukaj etykiety dla każdej ze znalezionych automatycznie zmiennych wejściowych
+        int np = 0;
+        for(String s : fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList())) {
+        	Optional<Parameter> optional = paramList.stream()
+                    .filter(x -> s.equals(x.getName()))
+                    .findFirst();
+			if(optional.isPresent()) {
+				Parameter p = optional.get();
+				addParameter(p,np++);
+			} else {
+				// nie ma etykiety, dodaj z nazwą zmiennej jako etykietą
+				addParameter(new Parameter(s,s,"?",1),np++);
+			}
+        }
+    }
+    
+    // odczytywanie etykiet parametrów wejściowych z pliku XML
+    private void loadXML() {
+    	  String filePath = "./src/main/resources/parameters.xml";
+          File xmlFile = new File(filePath);
+          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+          DocumentBuilder dBuilder;
+          
+          try {
+              dBuilder = dbFactory.newDocumentBuilder();
+              Document doc = dBuilder.parse(xmlFile);
+              doc.getDocumentElement().normalize();
+              
+              NodeList nodeList = doc.getElementsByTagName("parameter");
+              for (int i = 0; i < nodeList.getLength(); i++)
+                 paramList.add(xmlParam(nodeList.item(i)));
+              
+          } catch (SAXException | ParserConfigurationException | IOException e1) {
+             e1.printStackTrace();
+          }
+
+    }
+    
+    // utworzenie obiektu Parameter na podstawie właściwości zapisanych w węzle XML-a
+    private Parameter xmlParam(Node node) {
+        Parameter item = new Parameter("test", "test", "???", 0.0);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+            // todo wyjatki gdy tagi nieobecne
+            item.setName(element.getAttribute("id"));
+            item.setLabel(getTagValue("label", element));
+            item.setUnit(getTagValue("unit", element));
+        }
+
+        return item;
+    }
+    
+    private static String getTagValue(String tag, Element element) {
+        NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
+        Node node = (Node) nodeList.item(0);
+        return node.getNodeValue();
     }
 
-    private void addParameter(String parameterName) {
-        Label newLabel = new Label(parameterName.replace("in_", "").replace("_", " "));
+    private void addParameter(Parameter param, int row) {
+        Label newLabel = new Label(param.getLabel()+" ["+param.getUnit()+"]");
         newLabel.setWrapText(true);
         TextField newTextField = new TextField();
-        newTextField.setId(parameterName);
+        newTextField.setId(param.getName());
         Button showChartButton = new Button();
 
         Image image = new Image(getClass().getResourceAsStream("chart.png"));
         showChartButton.setGraphic(new ImageView(image));
 
-        showChartButton.setOnMouseClicked(new ShowParameterChartButtonClickHandler(parameterName, fuzzyDoctor));
+        showChartButton.setOnMouseClicked(new ShowParameterChartButtonClickHandler(param.getName(), fuzzyDoctor));
 
         parametersGrid.getRowConstraints().size();
-        parametersGrid.addRow(parametersNames.size(), showChartButton, newLabel, newTextField);
-        parametersNames.add(parameterName);
+        parametersGrid.addRow(row, showChartButton, newLabel, newTextField);
+        //parametersNames.add(param.getName());
     }
 
     @FXML
@@ -62,15 +133,27 @@ public class ViewController {
     private List<Parameter> getParametersFromFields() {
         List<Parameter> parameters = new ArrayList<>();
         parametersGrid.getChildren().stream()
-                .filter(child -> parametersNames.contains(child.getId())
+                .filter(child -> paramList.stream()
+                        .filter(x -> x.getName().equals(child.getId()))
+                        .findFirst().isPresent()
                         && ((TextField) child).getText() != null
                         && !((TextField) child).getText().equals(""))
                 .forEach(child -> parameters.add(getParameterFromField((TextField) child)));
+        
         return parameters;
     }
 
     private Parameter getParameterFromField(TextField parameterField) {
-        return new Parameter(parameterField.getId(), Double.parseDouble(parameterField.getText()));
+        Optional<Parameter> optional = paramList.stream()
+                .filter(x -> parameterField.getId().equals(x.getName()))
+                .findFirst();
+        if(optional.isPresent()) {
+        	Parameter p = optional.get();
+        	p.setValue(Double.parseDouble(parameterField.getText()));
+        	return p;
+        } else {
+			return (new Parameter("error","error","?",1));
+		}
     }
 
     private void printAnswer(List<Disease> diseases) {
