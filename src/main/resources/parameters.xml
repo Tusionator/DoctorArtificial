@@ -159,14 +159,74 @@
    
    <disease id = "out_nadcisnienie_tetnicze">
       <label>Nadciśnienie tętnicze</label>
-	  <url>1</url>
+	  <url></url>
    </disease>
-   <disease id = "out_insulinooporność">
+   <disease id = "out_insulinoopornosc">
       <label>Insulinooporność</label>
-	  <url>2</url>
+	  <url></url>
    </disease>
    <disease id = "out_cukrzyca">
       <label>Cukrzyca</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_stanp_rzedcukrzycowy">
+      <label>Stan przedcukrzycowy</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_niewydolnosc_nerek">
+      <label>Niewydolność nerek</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_niedoczynnosc_tarczycy">
+      <label>Niedoczynność tarczycy</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_nadczynnosc_tarczycy">
+      <label>Nadczynność tarczycy</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_zakazenie_drog_moczowych">
+      <label>Zakażenie dróg moczowych</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_ostry_stan_zapalny">
+      <label>Ostry stan zapalny</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_choroba_nowotworowa">
+      <label>Choroba nowotworowa</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_zoltaczka_zakazna">
+      <label>Żółtaczka zakaźna</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_zoltaczka_mechaniczna">
+      <label>Żółtaczka mechaniczna</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_zapalenie_trzustki">
+      <label>Zapalenie trzustki</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_niedokrwistosc_z_niedoboru_zelaza">
+      <label>Niedokrwistość z niedoboru żelaza</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_niedokrwistosc_z_niedoboru_wit_b12">
+      <label>Niedokrwistość z niedoboru witaminy B 12</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_niedokrwistosc_z_niedoboru_kwasu_foliowego">
+      <label>Niedokrwistość z niedoboru kwasu foliowego</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_choroba_hashimoto">
+      <label>Choroba Hashimoto</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_wzw">
+      <label>WZW</label>
 	  <url></url>
    </disease>
 </fuzzydoctor_parameters>
