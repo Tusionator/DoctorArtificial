@@ -38,7 +38,7 @@ public class FuzzyDoctor {
 
     private void initDoctor() {
         // Load from 'FCL' file
-        String fileName = "D:\\projekty_java\\DoctorArtificial\\src\\main\\java\\diseases.fcl";
+        String fileName = "./src/main/resources/diseases.fcl";
         fis = FIS.load(fileName, true);
 
         // Error while loading?

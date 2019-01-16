@@ -1,0 +1,160 @@
+<?xml version = "1.0" encoding="utf-8"?>
+<fuzzydoctor_parameters>
+   <parameter id = "in_cisnienie_skurczowe">
+      <label>ciśnienie skurczowe</label>
+	  <unit>mm Hg</unit>
+      <min>80</min>
+      <max>130</max>
+   </parameter>
+   <parameter id = "in_cisnienie_rozkurczowe">
+      <label>ciśnienie rozkurczowe</label>
+	  <unit>mm Hg</unit>
+      <min>40</min>
+      <max>90</max>
+   </parameter>
+   <parameter id = "in_bilirubina">
+      <label>bilirubina</label>
+	  <unit>mg%</unit>
+      <min>0.3</min>
+      <max>1</max>
+   </parameter>
+   <parameter id = "in_hemoglobina">
+      <label>hemoglobina</label>
+	  <unit>mg</unit>
+      <min>11</min>
+      <max>18</max>
+   </parameter>
+   <parameter id = "in_zelazo">
+      <label>żelazo</label>
+	  <unit>mmol/l</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_wit_b12">
+      <label>witamina B12</label>
+	  <unit>pmol/l</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_amylaza">
+      <label>amylaza</label>
+	  <unit>U/I</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_mcv">
+      <label>MCV</label>
+	  <unit>fl</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_leukocytoza">
+      <label>leukocytoza</label>
+	  <unit>tys. komórek/µl</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+  <parameter id = "in_kwas_foliowy">
+      <label>kwas foliowy</label>
+	  <unit>nmol/l</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+  <parameter id = "in_hdl">
+      <label>HDL</label>
+	  <unit>mg/dl</unit>
+      <min>40</min>
+      <max>100</max>
+   </parameter>
+  <parameter id = "in_ldl">
+      <label>LDL</label>
+	  <unit>mg/dl</unit>
+      <min></min>
+      <max>155</max>
+   </parameter>
+  <parameter id = "in_kreatynina">
+      <label>kreatynina</label>
+	  <unit>mg/dl</unit>
+      <min>0.6</min>
+      <max>1.3</max>
+   </parameter>
+   <parameter id = "in_aspat">
+      <label>ASPAT</label>
+	  <unit>U/l</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_alat">
+      <label>ALAT</label>
+	  <unit>U/l</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_ggtp">
+      <label>GGTP</label>
+	  <unit>IU/l</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_tsh">
+      <label>TSH</label>
+	  <unit>µU/ml</unit>
+      <min>0.23</min>
+      <max>4.0</max>
+   </parameter>
+   <parameter id = "in_anty_tg">
+      <label>anty-TG</label>
+	  <unit>IU/ml</unit>
+      <min></min>
+      <max>115</max>
+   </parameter>
+   <parameter id = "in_anty_tpo">
+      <label>anty-TPO</label>
+	  <unit>IU/ml</unit>
+      <min></min>
+      <max>34</max>
+   </parameter>
+<parameter id = "in_glukoza0">
+      <label>glukoza na czczo</label>
+	  <unit>mg/dl</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_glukoza2">
+      <label>glukoza po 2h</label>
+	  <unit>mg/dl</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+<parameter id = "in_insulina0">
+      <label>insulina na czczo</label>
+	  <unit>mIU/ml</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_insulina2">
+      <label>insulina po 2h</label>
+	  <unit>mIU/ml</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_crp">
+      <label>CRP</label>
+	  <unit>mg/l</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_ob">
+      <label>OB</label>
+	  <unit>mm/h</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   <parameter id = "in_glukoza_w_moczu">
+      <label>glukoza w moczu</label>
+	  <unit>mg/dl</unit>
+      <min></min>
+      <max></max>
+   </parameter>
+   
+</fuzzydoctor_parameters>
