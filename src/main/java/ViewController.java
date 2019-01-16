@@ -104,7 +104,7 @@ public class ViewController {
     
     // utworzenie obiektu Disease na podstawie właściwości zapisanych w węzle XML-a
     private Disease xmlDisease(Node node) {
-        Disease item = new Disease("test-n", "test-l", "url", 0.0);
+        Disease item = new Disease("test-n", "test-l", "url", -1.0);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
             item.setName(element.getAttribute("id"));
@@ -153,8 +153,10 @@ public class ViewController {
     }
     private Disease diseaseProperties(Disease d) {
     	Optional <Disease> dd = diseaseList.stream().filter(x->x.getName().equals(d.getName())).findFirst();
-        if(dd.isPresent()) {            	
-        	return dd.get();
+        if(dd.isPresent()) {
+        	Disease disease = dd.get();
+        	disease.setValue(d.getValue());
+        	return disease;
         } else {
         	d.setLabel(d.getName());
         	return d;
