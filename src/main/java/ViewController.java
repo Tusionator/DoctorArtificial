@@ -44,6 +44,7 @@ public class ViewController {
     private void initialize() {
         //parametersNames.clear();
         parametersGrid.setVgap(10.0);
+        parametersGrid.setHgap(5.0);
         loadXML();
         //fuzzyDoctor.getInputVariables().stream().sorted().collect(Collectors.toList()).forEach(this::addParameter);
         
@@ -206,7 +207,12 @@ public class ViewController {
             diseaseNameLabel.setWrapText(true);
             Label infoLabel = new Label("podano za mało danych, aby określenie było możliwe.");
             infoLabel.setWrapText(true);
-            doctorAnswer.addRow(index, emptyLabel, diseaseNameLabel, infoLabel);
+            Button diseaseFuzzyficationButton = new Button();
+            Image image2 = new Image(getClass().getResourceAsStream("chart2.png"));
+            diseaseFuzzyficationButton.setGraphic(new ImageView(image2));
+            diseaseFuzzyficationButton.setOnMouseClicked(
+                    new ShowParameterChartButtonClickHandler(disease.getName(), fuzzyDoctor));
+            doctorAnswer.addRow(index, diseaseFuzzyficationButton, emptyLabel, diseaseNameLabel, infoLabel);
         } else {
             Label diseaseNameLabel = new Label(labelText);
             diseaseNameLabel.setWrapText(true);
@@ -217,9 +223,14 @@ public class ViewController {
             showChartButton.setGraphic(new ImageView(image));
             showChartButton.setOnMouseClicked(
                     new ShowDiseaseAnswerChartButtonClickHandler(disease.getName(), fuzzyDoctor));
+            Button diseaseFuzzyficationButton = new Button();
+            Image image2 = new Image(getClass().getResourceAsStream("chart2.png"));
+            diseaseFuzzyficationButton.setGraphic(new ImageView(image2));
+            diseaseFuzzyficationButton.setOnMouseClicked(
+                    new ShowParameterChartButtonClickHandler(disease.getName(), fuzzyDoctor));
 
             doctorAnswer.getRowConstraints().size();
-            doctorAnswer.addRow(index, showChartButton, diseaseNameLabel, answer);
+            doctorAnswer.addRow(index, diseaseFuzzyficationButton, showChartButton, diseaseNameLabel, answer);
         }
     }
 

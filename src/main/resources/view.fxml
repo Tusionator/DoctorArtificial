@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.4173469387755102" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewController">
+<SplitPane dividerPositions="0.37675350701402804" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewController">
     <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="536.0" prefWidth="472.0">
             <children>
@@ -44,6 +44,7 @@
                             <children>
                                 <GridPane fx:id="doctorAnswer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columnConstraints>
+                                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="40.0" />
                                         <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="60.0" />
                                         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="170.0" />
                                         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="290.0" />
