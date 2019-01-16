@@ -85,13 +85,13 @@ END_FUZZIFY
 FUZZIFY in_bilirubina
 	TERM niska := (0, 1) (0.3, 0) ;
 	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1);
+	TERM wysoka := (0.9, 0) (1.2, 1) (10, 1);
 END_FUZZIFY
 
 // hemoglobina
 // 11-18 g/dl
 FUZZIFY in_hemoglobina
-	TERM niska := (10, 1) (12, 0) ;
+	TERM niska := (0, 1) (10, 1) (12, 0) ;
 	TERM wnormie := (10, 0) (12,1) (17,1) (19,0);
 	TERM wysoka := (17, 0) (19, 1);
 END_FUZZIFY
@@ -102,23 +102,23 @@ END_FUZZIFY
 FUZZIFY in_zelazo
 	TERM niska := (0, 1) (9, 0) ;
 	TERM wnormie := (5, 0) (9,1) (28,1) (40,0);
-	TERM wysoka := (28, 0) (40, 1);
+	TERM wysoka := (28, 0) (40, 1) (100, 1);
 END_FUZZIFY
 
 // wit. B 12
 // Norma: 103-517 pmol/l (140-700 pg/ml).
 FUZZIFY in_wit_b12
-	TERM niska := (90, 1) (105, 0) ;
+	TERM niska := (0, 1) (90, 1) (105, 0) ;
 	TERM wnormie := (90, 0) (105,1) (510,1) (555,0);
-	TERM wysoka := (105, 0) (555, 1);
+	TERM wysoka := (510, 0) (555, 1) (1000, 1);
 END_FUZZIFY
 
 // amylaza
 // 25-125 U/I, przy czym u osób starszych jest on szerszy - 20-160 U/l.
 FUZZIFY in_amylaza
-	TERM niska := (15, 1) (25, 0) ;
+	TERM niska := (0, 1) (15, 1) (25, 0) ;
 	TERM wnormie := (15, 0) (25,1) (125,1) (150,0);
-	TERM wysoka := (125, 0) (150, 1);
+	TERM wysoka := (125, 0) (150, 1) (500, 1);
 END_FUZZIFY
 
 // mcv
@@ -126,13 +126,13 @@ END_FUZZIFY
 FUZZIFY in_mcv
 	TERM mala := (0, 1) (82, 0) ;
 	TERM wnormie := (0, 0) (82,1) (92,1) (100,0);
-	TERM duza := (92, 0) (100, 1);
+	TERM duza := (92, 0) (100, 1) (200, 1);
 END_FUZZIFY
 
 // leukocytoza
 //  4–10 tys. komórek/µl
 FUZZIFY in_leukocytoza
-	TERM niska := (3000, 1) (4000, 0) ;
+	TERM niska := (1500,1) (3000, 1) (4000, 0) ;
 	TERM wnormie := (3000, 0) (4000,1) (10000,1) (11000,0);
 	TERM zwiekszona := (10000, 0) (11000, 1) (50000, 1);
 END_FUZZIFY
@@ -142,7 +142,7 @@ END_FUZZIFY
 FUZZIFY in_kwas_foliowy
 	TERM niska := (0, 1) (3.5, 0) ;
 	TERM wnormie := (3.5, 0) (4.5,1) (19,1) (22,0);
-	TERM wysoka := (19, 0) (22, 1);
+	TERM wysoka := (19, 0) (22, 1) (50, 1);
 END_FUZZIFY
 
 
@@ -159,15 +159,15 @@ END_FUZZIFY
 // LDL
 // 
 FUZZIFY in_ldl
-	TERM niska := (0, 1) (135, 0) ;
+	TERM niska := (0, 1) (135, 1) (140, 0) ;
 	TERM graniczne := (135, 0) (140,1) (150,1) (155,0);
-	TERM nieprawidlowe := (150, 0) (155, 1);
+	TERM nieprawidlowe := (150, 0) (155, 1) (250, 1);
 END_FUZZIFY
 
 // glukoza na czczo
 // Norma: od 70 do 99 mg/dL (od 3.9 do 5.5 mmol/L)
 FUZZIFY in_glukoza0
-	TERM niska := (60, 1) (70, 0) ;
+	TERM niska := (0, 1) (60, 1) (70, 0) ;
 	TERM prawidlowa := (60, 0) (70, 1) (90, 1) (105,0);
 	TERM wysoka := (90, 0) (105,1) (120,1) (130,0);
 	TERM bardzowysoka := (120, 0) (130, 1) (300, 1);
@@ -176,7 +176,7 @@ END_FUZZIFY
 // glukoza po 2 h
 // 
 FUZZIFY in_glukoza2
-	TERM prawidlowa := (135, 1) (145, 0) ;
+	TERM prawidlowa := (0, 1) (135, 1) (145, 0) ;
 	TERM wysoka := (135, 0) (145, 1) (190, 1) (210,0);
 	TERM bardzowysoka := (190, 0) (210,1) (500, 1);
 END_FUZZIFY
@@ -184,14 +184,14 @@ END_FUZZIFY
 // insulina na czczo
 // norma 3-25 mU/l
 FUZZIFY in_insulina0
-	TERM prawidlowa := (25, 1) (30, 0) ;
+	TERM prawidlowa := (0, 1) (25, 1) (30, 0) ;
 	TERM wysoka := (25, 0) (30,1) (200,1);
 END_FUZZIFY
 
 // insulina po 2 h
 // 
 FUZZIFY in_insulina2
-	TERM prawidlowa := (50, 1) (60, 0) ;
+	TERM prawidlowa := (0, 1) (50, 1) (60, 0) ;
 	TERM wysoka := (50, 0) (60,1) (100, 0);
 	TERM bardzowysoka := (60, 0) (100,1) (200,1);
 END_FUZZIFY
@@ -199,7 +199,7 @@ END_FUZZIFY
 // kreatynina
 // Norma dla kreatyniny to 53-115 µmol/l (0,6-1,3 mg/dl).
 FUZZIFY in_kreatynina
-	TERM niska := (50, 1) (55, 0) ;
+	TERM niska := (0, 1) (50, 1) (55, 0) ;
 	TERM wnormie := (50, 0) (55,1) (110,1) (120,0);
 	TERM wysoka := (110, 0) (120, 1);
 END_FUZZIFY
@@ -226,7 +226,7 @@ END_FUZZIFY
 // GGTP u kobiet wynoszą poniżej 35 IU/l, a u mężczyzn poniżej 40 IU/l.
 FUZZIFY in_ggtp
 	TERM wnormie := (0,1) (40, 1) (50,0);
-	TERM wysoka := (40, 0) (50, 1);
+	TERM wysoka := (40, 0) (50, 1) (400, 1);
 END_FUZZIFY
 
 // TSH
@@ -272,7 +272,7 @@ END_FUZZIFY
 // 0,1 - 1 mg/dl
 FUZZIFY in_glukoza_w_moczu
 	TERM wnormie := (0, 1) (1, 1) (1.5, 0) ;
-	TERM wysoka := (1, 0) (10,0.5) (250,1);
+	TERM wysoka := (1, 0) (10,1) (250,1);
 END_FUZZIFY
 
 DEFUZZIFY out_nadcisnienie_tetnicze			// Defzzzify output variable 'tip' : {'maloprawdopodobne', 'prawdopodobne', 'praktyczniepewne' }
@@ -436,7 +436,8 @@ RULEBLOCK No1
 	// nadciśnienie tętnicze
 	RULE 0 : IF in_cisnienie_skurczowe IS niskie AND in_cisnienie_rozkurczowe IS niskie THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
 	RULE 1 : IF in_cisnienie_skurczowe IS prawidlowe AND in_cisnienie_rozkurczowe IS prawidlowe THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
-	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
+	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS prawdopodobne;
+	RULE 32 : IF in_cisnienie_skurczowe IS wysokie AND in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
 	// żółtaczki
 	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS prawdopodobne;
 	RULE 4 : IF in_bilirubina IS wysoka AND in_crp IS wnormie AND (in_aspat IS wysoka  OR in_aspat IS bardzowysoka)THEN out_zoltaczka_mechaniczna IS praktyczniepewne;

@@ -32,7 +32,7 @@ public class FuzzyDoctor {
 
     private List<Disease> getResults() {
         return getOutputVariables().stream()
-                .map(diseaseName -> new Disease(diseaseName, fis.getVariable(diseaseName).getValue()))
+                .map(diseaseName -> new Disease(diseaseName, "", "", fis.getVariable(diseaseName).getValue()))
                 .collect(Collectors.toList());
     }
 

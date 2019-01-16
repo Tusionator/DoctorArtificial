@@ -157,4 +157,16 @@
       <max></max>
    </parameter>
    
+   <disease id = "out_nadcisnienie_tetnicze">
+      <label>Nadciśnienie tętnicze</label>
+	  <url>1</url>
+   </disease>
+   <disease id = "out_insulinooporność">
+      <label>Insulinooporność</label>
+	  <url>2</url>
+   </disease>
+   <disease id = "out_cukrzyca">
+      <label>Cukrzyca</label>
+	  <url></url>
+   </disease>
 </fuzzydoctor_parameters>
