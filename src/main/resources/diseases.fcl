@@ -49,6 +49,7 @@ VAR_OUTPUT				// Prawdopodobieństwo występowania choroby
 	out_niewydolnosc_nerek : REAL;
 	out_niedoczynnosc_tarczycy : REAL;
 	out_nadczynnosc_tarczycy : REAL;
+	out_gravesa_basedova : REAL;
 	out_zakazenie_drog_moczowych : REAL;
 	out_ostry_stan_zapalny : REAL;
 	out_choroba_nowotworowa : REAL;
@@ -71,21 +72,20 @@ END_VAR
 FUZZIFY in_cisnienie_skurczowe
 	TERM niskie := (0, 1) (80, 1) (100, 0) ;
 	TERM prawidlowe := (80, 0) (100,1) (130,1) (150,0);
-	TERM wysokie := (130, 0) (150, 1) (200, 1);
+	TERM wysokie := (130, 0) (150, 1) (200, 1) (300,0);
 END_FUZZIFY
 
 FUZZIFY in_cisnienie_rozkurczowe
 	TERM niskie := (0, 1) (36, 1) (60, 0) ;
-	TERM prawidlowe := (36, 0) (60,1) (88,1) (92,0);
-	TERM wysokie := (88, 0) (92, 1) (200, 1);
+	TERM prawidlowe := (36, 0) (60,1) (80,1) (100,0);
+	TERM wysokie := (80, 0) (100, 1) (200, 1) (300, 0);
 END_FUZZIFY	
 
 // bilirubina
 // 0,2-1,1 mg% (3,42-20,6 µmol/l)
 FUZZIFY in_bilirubina
-	TERM niska := (0, 1) (0.3, 0) ;
-	TERM wnormie := (0, 0) (0.3,1) (0.9,1) (1.2,0);
-	TERM wysoka := (0.9, 0) (1.2, 1) (10, 1);
+	TERM wnormie := (0, 1) (0.3,1) (0.9,1) (1.2,0);
+	TERM wysoka := (0.9, 0) (1.2, 1) (10, 1) (15, 0);
 END_FUZZIFY
 
 // hemoglobina
@@ -167,10 +167,8 @@ END_FUZZIFY
 // glukoza na czczo
 // Norma: od 70 do 99 mg/dL (od 3.9 do 5.5 mmol/L)
 FUZZIFY in_glukoza0
-	TERM niska := (0, 1) (60, 1) (70, 0) ;
-	TERM prawidlowa := (60, 0) (70, 1) (90, 1) (105,0);
-	TERM wysoka := (90, 0) (105,1) (120,1) (130,0);
-	TERM bardzowysoka := (120, 0) (130, 1) (300, 1);
+	TERM prawidlowa := (0, 1) (70, 1) (90, 1) (105,0);
+	TERM wysoka := (90, 0) (105,1) (120,1) (300,1);
 END_FUZZIFY
 
 // glukoza po 2 h
@@ -272,31 +270,31 @@ END_FUZZIFY
 // 0,1 - 1 mg/dl
 FUZZIFY in_glukoza_w_moczu
 	TERM wnormie := (0, 1) (1, 1) (1.5, 0) ;
-	TERM wysoka := (1, 0) (10,1) (250,1);
+	TERM wysoka := (1, 0) (10,1) (30,1);
 END_FUZZIFY
 
-DEFUZZIFY out_nadcisnienie_tetnicze			// Defzzzify output variable 'tip' : {'maloprawdopodobne', 'prawdopodobne', 'praktyczniepewne' }
-	TERM maloprawdopodobne := (0,1) (15,0);
-	TERM prawdopodobne := (10,0) (15,1) (20,0);
-	TERM praktyczniepewne := (20,0) (100, 1);
-	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
-	DEFAULT := -1;		// Default value is -1 (if no rule activates defuzzifier)
+DEFUZZIFY out_nadcisnienie_tetnicze
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
+	METHOD : COG;
+	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_zoltaczka_mechaniczna
-	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
-	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktycznieniemozliwe := (0,1) (20,0);
+	TERM prawdopodobne := (0,0) (20,1) (70,1) (80,0);
 	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;		
 END_DEFUZZIFY
 
 DEFUZZIFY out_zoltaczka_zakazna
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM praktycznieniemozliwe := (0,1) (20,0);
+	TERM prawdopodobne := (0,0) (20,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
-	DEFAULT := -1;		
+	DEFAULT := -1;			
 END_DEFUZZIFY
 
 DEFUZZIFY out_insulinoopornosc
@@ -316,49 +314,57 @@ DEFUZZIFY out_stan_przedcukrzycowy
 END_DEFUZZIFY
 
 DEFUZZIFY out_cukrzyca
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_niewydolnosc_nerek
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_niedoczynnosc_tarczycy
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM praktycznieniemozliwe := trian 0 5 10;
+	TERM prawdopodobne :=  trian 10 40 75;
+	TERM praktyczniepewne := trian 50 75 100;
+	METHOD : COG;
+	DEFAULT := -1;
+END_DEFUZZIFY
+
+DEFUZZIFY out_gravesa_basedova
+	TERM praktycznieniemozliwe := trian 0 5 10;
+	TERM prawdopodobne :=  trian 10 40 75;
+	TERM praktyczniepewne := trian 50 75 100;
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_nadczynnosc_tarczycy
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM praktycznieniemozliwe := trian 0 5 10;
+	TERM prawdopodobne :=  trian 10 40 75;
+	TERM praktyczniepewne := trian 50 75 100;
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_zakazenie_drog_moczowych
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_ostry_stan_zapalny
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
@@ -372,107 +378,140 @@ DEFUZZIFY out_choroba_nowotworowa
 END_DEFUZZIFY
 
 DEFUZZIFY out_zapalenie_trzustki
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_zapalenie_trzustki
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_niedokrwistosc_z_niedoboru_zelaza
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_niedokrwistosc_z_niedoboru_wit_b12
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_niedokrwistosc_z_niedoboru_kwasu_foliowego
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_choroba_hashimoto
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM praktycznieniemozliwe := trian 0 5 10;
+	TERM prawdopodobne :=  trian 10 40 75;
+	TERM praktyczniepewne := trian 50 75 100;
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
 DEFUZZIFY out_wzw
-	TERM maloprawdopodobne := (0,1) (10,1) (20,0);
-	TERM prawdopodobne := (10,0) (20,1) (40,0);
-	TERM praktyczniepewne := (20,0) (40,1) (100,1);
+	TERM maloprawdopodobne := (0,1) (20,1) (40,0);
+	TERM prawdopodobne := (20,0) (40,1) (70,1) (80,0);
+	TERM praktyczniepewne := (70,0) (80,1) (100,1);
 	METHOD : COG;
 	DEFAULT := -1;
 END_DEFUZZIFY
 
-
+// nadciśnienie tętnicze
 RULEBLOCK No1
 	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
 	ACT : MIN;			// Use 'min' activation method
 	ACCU : MAX;			// Use 'max' accumulation method
 
-	// nadciśnienie tętnicze
-	RULE 0 : IF in_cisnienie_skurczowe IS niskie AND in_cisnienie_rozkurczowe IS niskie THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
-	RULE 1 : IF in_cisnienie_skurczowe IS prawidlowe AND in_cisnienie_rozkurczowe IS prawidlowe THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
+	// nadciśnienie
+	RULE 1 : IF (in_cisnienie_skurczowe IS niskie OR in_cisnienie_skurczowe IS prawidlowe) AND (in_cisnienie_rozkurczowe IS niskie OR in_cisnienie_rozkurczowe IS prawidlowe) THEN out_nadcisnienie_tetnicze IS maloprawdopodobne;
 	RULE 2 : IF in_cisnienie_skurczowe IS wysokie OR in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS prawdopodobne;
-	RULE 32 : IF in_cisnienie_skurczowe IS wysokie AND in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
+	RULE 3 : IF in_cisnienie_skurczowe IS wysokie AND in_cisnienie_rozkurczowe IS wysokie THEN out_nadcisnienie_tetnicze IS praktyczniepewne;
+
+	// nadczynność tarczycy
+	RULE 15: IF in_tsh IS wysoka THEN out_nadczynnosc_tarczycy IS praktycznieniemozliwe;
+	RULE 15: IF in_tsh IS wnormie THEN out_nadczynnosc_tarczycy IS praktycznieniemozliwe;
+	RULE 15 : IF in_tsh IS niska THEN out_nadczynnosc_tarczycy IS praktyczniepewne;
+	// niedoczynność
+	RULE 15: IF in_tsh IS niska THEN out_niedoczynnosc_tarczycy IS praktycznieniemozliwe;
+	RULE 15: IF in_tsh IS wnormie THEN out_niedoczynnosc_tarczycy IS praktycznieniemozliwe;
+	RULE 15 : IF in_tsh IS wysoka THEN out_niedoczynnosc_tarczycy IS praktyczniepewne;
+	
+	RULE 15 : IF in_tsh IS niska THEN out_gravesa_basedova IS prawdopodobne;
+	RULE 15 : IF in_anty_tpo IS wnormie AND in_anty_tg IS wnormie THEN out_choroba_hashimoto IS praktycznieniemozliwe;
+	RULE 15 : IF in_anty_tg IS podwyzszone AND in_tsh IS wnormie THEN out_choroba_hashimoto IS prawdopodobne;
+	RULE 16 : IF in_anty_tpo IS podwyzszone AND in_tsh IS wnormie THEN out_choroba_hashimoto IS prawdopodobne;
+	RULE 16 : IF in_anty_tpo IS podwyzszone AND in_anty_tg IS podwyzszone AND in_tsh IS wnormie THEN out_choroba_hashimoto IS praktyczniepewne;
+	
+	// insulinowe
+	RULE 4 : IF in_glukoza0 IS prawidlowa AND in_insulina0 IS prawidlowa THEN out_insulinoopornosc IS maloprawdopodobne;
+	RULE 5 : IF in_glukoza0 IS prawidlowa AND in_insulina0 IS prawidlowa AND in_glukoza2 IS prawidlowa AND in_insulina2 IS prawidlowa THEN out_insulinoopornosc IS maloprawdopodobne;
+	RULE 6 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_insulinoopornosc IS prawdopodobne;
+	RULE 7 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_insulinoopornosc IS praktyczniepewne;
+	RULE 8 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_stan_przedcukrzycowy IS praktyczniepewne;
+	RULE 9 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka AND in_glukoza_w_moczu IS wysoka THEN out_cukrzyca IS praktyczniepewne;
+	RULE 10 : IF in_glukoza_w_moczu IS wysoka THEN out_cukrzyca IS praktyczniepewne;
+	RULE 10 : IF in_glukoza_w_moczu IS wysoka AND in_insulina0 IS prawidlowa AND in_glukoza0 IS prawidlowa THEN out_cukrzyca IS praktyczniepewne;
+	RULE 11 : IF in_glukoza_w_moczu IS wnormie THEN out_cukrzyca IS maloprawdopodobne;
+	RULE 1 : IF in_insulina2 IS wysoka THEN out_insulinoopornosc IS prawdopodobne;
+	RULE 12 : IF in_insulina2 IS bardzowysoka THEN out_insulinoopornosc IS praktyczniepewne;
+	RULE 13 : IF in_insulina2 IS wysoka AND in_glukoza2 IS prawidlowa THEN out_insulinoopornosc IS praktyczniepewne;
+	
 	// żółtaczki
-	RULE 3 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS prawdopodobne;
-	RULE 4 : IF in_bilirubina IS wysoka AND in_crp IS wnormie AND (in_aspat IS wysoka  OR in_aspat IS bardzowysoka)THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
-	RULE 5 : IF in_bilirubina IS wysoka AND in_crp IS wysoka THEN out_zoltaczka_zakazna IS praktyczniepewne;
-	// cukrzyca/insulinooporność
-	RULE 6 : IF in_glukoza0 IS prawidlowa AND in_insulina0 IS prawidlowa THEN out_insulinoopornosc IS maloprawdopodobne;
-	RULE 7 : IF in_glukoza0 IS prawidlowa AND in_insulina0 IS prawidlowa AND in_glukoza2 IS prawidlowa AND in_insulina2 IS prawidlowa THEN out_insulinoopornosc IS maloprawdopodobne;
-	RULE 8 : IF in_glukoza0 IS wysoka AND in_insulina0 IS wysoka THEN out_insulinoopornosc IS prawdopodobne;
-	RULE 9 : IF (in_glukoza0 IS bardzowysoka OR in_glukoza0 IS wysoka) AND in_insulina0 IS wysoka THEN out_insulinoopornosc IS praktyczniepewne;
-	RULE 10 : IF (in_glukoza0 IS bardzowysoka OR in_glukoza0 IS wysoka) AND in_insulina0 IS wysoka THEN out_stan_przedcukrzycowy IS praktyczniepewne;
-	RULE 11 : IF (in_glukoza0 IS bardzowysoka OR in_glukoza0 IS wysoka) AND in_insulina0 IS wysoka AND in_glukoza_w_moczu IS wysoka THEN out_cukrzyca IS praktyczniepewne;
+	RULE 1 : IF in_bilirubina IS wysoka THEN out_zoltaczka_mechaniczna IS prawdopodobne;
+	RULE 2 : IF in_bilirubina IS wysoka THEN out_zoltaczka_zakazna IS prawdopodobne;
+	RULE 3 : IF in_bilirubina IS wnormie THEN out_zoltaczka_mechaniczna IS praktycznieniemozliwe;
+	RULE 4 : IF in_bilirubina IS wnormie THEN out_zoltaczka_zakazna IS praktycznieniemozliwe;
+	RULE 5 : IF in_bilirubina IS wysoka AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
+	RULE 5 : IF in_bilirubina IS wnormie AND in_crp IS wnormie THEN out_zoltaczka_mechaniczna IS praktycznieniemozliwe;
+	RULE 6 : IF in_bilirubina IS wysoka AND in_crp IS wnormie AND (in_aspat IS wysoka OR in_aspat IS bardzowysoka) THEN out_zoltaczka_mechaniczna IS praktyczniepewne;
+	RULE 6 : IF in_bilirubina IS wnormie AND in_crp IS wnormie AND (in_aspat IS wnormie OR in_aspat IS wnormie) THEN out_zoltaczka_mechaniczna IS praktycznieniemozliwe;
+	RULE 2 : IF in_bilirubina IS wysoka AND in_crp IS wysoka THEN out_zoltaczka_zakazna IS praktyczniepewne;
+	
+	// niedokrwistości
+	RULE 21 : IF in_mcv IS mala THEN out_niedokrwistosc_z_niedoboru_wit_b12 IS prawdopodobne;
+	RULE 21 : IF in_mcv IS duza THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS prawdopodobne;	
+	RULE 21 : IF in_mcv IS duza THEN out_niedokrwistosc_z_niedoboru_zelaza IS prawdopodobne;
+	RULE 23 : IF in_hemoglobina IS niska AND in_zelazo IS niska AND in_mcv IS duza THEN out_niedokrwistosc_z_niedoboru_zelaza IS praktyczniepewne;
+	RULE 24 : IF in_hemoglobina IS niska AND in_wit_b12 IS niska AND in_mcv IS mala THEN out_niedokrwistosc_z_niedoboru_wit_b12 IS praktyczniepewne;
+	RULE 25 : IF in_mcv IS duza AND in_kwas_foliowy IS niska THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS prawdopodobne;
+	RULE 26 : IF in_mcv IS duza AND in_kwas_foliowy IS niska AND in_zelazo IS wnormie THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS praktyczniepewne;	
+	
+	// INNE
 	// niewydolność nerek
 	RULE 12 : IF in_cisnienie_skurczowe IS wysokie AND in_kreatynina IS wysoka THEN out_niewydolnosc_nerek IS prawdopodobne;
 	RULE 13 : IF in_cisnienie_skurczowe IS wysokie AND in_zelazo IS niska AND in_kreatynina IS wysoka THEN out_niewydolnosc_nerek IS praktyczniepewne;
-	// tarczycowe
-	RULE 14 : IF in_ldl IS graniczne AND in_tsh IS wysoka THEN out_niedoczynnosc_tarczycy IS prawdopodobne;
-	RULE 15 : IF in_tsh IS niska THEN out_nadczynnosc_tarczycy IS praktyczniepewne;
-	RULE 16 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS prawdopodobne;
-	RULE 17 : IF (in_anty_tg IS podwyzszone OR in_anty_tpo IS podwyzszone) AND in_tsh IS wnormie THEN out_choroba_hashimoto IS praktyczniepewne;
+	
 	// nowotworowe
 	RULE 18 : IF in_ob IS wnormie THEN out_choroba_nowotworowa IS maloprawdopodobne;
 	RULE 19 : IF in_ob IS wysoka THEN out_choroba_nowotworowa IS prawdopodobne;
 	RULE 20 : IF in_ob IS ekstremalna THEN out_choroba_nowotworowa IS praktyczniepewne;
+	
 	// stan zapalny
 	RULE 21 : IF in_crp IS ekstremalna THEN out_ostry_stan_zapalny IS praktyczniepewne;
 	RULE 22 : IF in_amylaza IS wysoka AND in_crp IS wysoka THEN out_zapalenie_trzustki IS praktyczniepewne;
-	// niedokrwistości
-	RULE 23 : IF in_hemoglobina IS niska AND in_zelazo IS niska AND in_mcv IS duza THEN out_niedokrwistosc_z_niedoboru_zelaza IS praktyczniepewne;
-	RULE 24 : IF in_hemoglobina IS niska AND in_wit_b12 IS niska AND in_mcv IS mala THEN out_niedokrwistosc_z_niedoboru_wit_b12 IS praktyczniepewne;
-	RULE 25 : IF in_mcv IS duza AND in_kwas_foliowy IS niska THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS prawdopodobne;
-	RULE 26 : IF in_mcv IS duza AND in_kwas_foliowy IS niska AND in_zelazo IS wnormie THEN out_niedokrwistosc_z_niedoboru_kwasu_foliowego IS praktyczniepewne;
+	
 	// zakażenie dróg moczowych
 	RULE 27 : IF in_leukocytoza IS zwiekszona AND in_crp IS wysoka THEN out_zakazenie_drog_moczowych IS prawdopodobne;
 	// WZW
 	RULE 28 : IF in_leukocytoza IS zwiekszona AND (in_aspat IS wysoka OR in_aspat IS bardzowysoka OR in_alat IS wysoka OR in_alat IS bardzowysoka) THEN out_wzw IS prawdopodobne;
+
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

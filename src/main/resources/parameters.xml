@@ -169,7 +169,7 @@
       <label>Cukrzyca</label>
 	  <url></url>
    </disease>
-   <disease id = "out_stanp_przedcukrzycowy">
+   <disease id = "out_stan_przedcukrzycowy">
       <label>Stan przedcukrzycowy</label>
 	  <url></url>
    </disease>
@@ -227,6 +227,10 @@
    </disease>
    <disease id = "out_wzw">
       <label>WZW</label>
+	  <url></url>
+   </disease>
+   <disease id = "out_gravesa_basedova">
+      <label>Choroba Gravesa i Basedowa</label>
 	  <url></url>
    </disease>
 </fuzzydoctor_parameters>
