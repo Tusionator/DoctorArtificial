@@ -216,7 +216,12 @@ public class ViewController {
         } else {
             Label diseaseNameLabel = new Label(labelText);
             diseaseNameLabel.setWrapText(true);
-            BorderStroke borderStroke = new BorderStroke(Color.rgb (Math.min(255, Math.floorDiv((int) disease.getValue() * 255,50)),Math.min(255,511 - Math.floorDiv((int) disease.getValue() * 255,50)),0), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2,2,2,2));
+            BorderStroke borderStroke = new BorderStroke(Color.rgb(
+            		Math.min(255, Math.floorDiv((int) disease.getValue() * 255,50)),
+            		Math.min(255,511 - Math.floorDiv((int) disease.getValue() * 255,50)),
+            		0),
+            		BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+            		new BorderWidths(2,2,2,2));
             diseaseNameLabel.setBorder(new Border(borderStroke));
             Label answer = new Label(getDiseaseDescription(disease));
             answer.setWrapText(true);
