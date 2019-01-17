@@ -2,9 +2,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -196,7 +203,7 @@ public class ViewController {
         String labelText = disease.getLabel();
         if (disease.getValue() < 0) {
             Label emptyLabel = new Label();
-            Label diseaseNameLabel = new Label(labelText);
+            Label diseaseNameLabel = new Label(labelText);            
             diseaseNameLabel.setWrapText(true);
             Label infoLabel = new Label("podano za mało danych, aby określenie było możliwe.");
             infoLabel.setWrapText(true);
@@ -209,6 +216,8 @@ public class ViewController {
         } else {
             Label diseaseNameLabel = new Label(labelText);
             diseaseNameLabel.setWrapText(true);
+            BorderStroke borderStroke = new BorderStroke(Color.rgb (Math.min(255, Math.floorDiv((int) disease.getValue() * 255,50)),Math.min(255,511 - Math.floorDiv((int) disease.getValue() * 255,50)),0), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2,2,2,2));
+            diseaseNameLabel.setBorder(new Border(borderStroke));
             Label answer = new Label(getDiseaseDescription(disease));
             answer.setWrapText(true);
             Button showChartButton = new Button();

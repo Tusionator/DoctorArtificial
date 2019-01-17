@@ -156,7 +156,7 @@
       <min></min>
       <max></max>
    </parameter>
-
+   
    <disease id = "out_nadcisnienie_tetnicze">
       <label>Nadciśnienie tętnicze</label>
 	  <url></url>
@@ -224,10 +224,6 @@
    <disease id = "out_choroba_hashimoto">
       <label>Choroba Hashimoto</label>
 	  <url></url>
-   </disease>
-   <disease id = "out_stan_przedcukrzycowy">
-       <label>Stan przedcukrzycowy</label>
-       <url></url>
    </disease>
    <disease id = "out_wzw">
       <label>WZW</label>
